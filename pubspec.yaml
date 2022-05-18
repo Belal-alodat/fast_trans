@@ -34,6 +34,13 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  provider: ^5.0.0
+  dio: ^4.0.6
+  easy_localization: ^3.0.0
+  easy_localization_loader:
+    git: https://github.com/aissat/easy_localization_loader.git
+
+  url_launcher: ^6.0.2
 
 dev_dependencies:
   flutter_test:
@@ -56,7 +63,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  assets:
+    - images/
+    - assets/translations/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -73,6 +82,16 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: loewl
+      fonts:
+        - asset: assets/fonts/loewl.otf
+    - family: loewm
+      fonts:
+        - asset: assets/fonts/loewm.otf
+    - family: loewb
+      fonts:
+        - asset: assets/fonts/loewb.otf
   # fonts:
   #   - family: Schyler
   #     fonts:
