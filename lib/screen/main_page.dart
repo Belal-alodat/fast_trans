@@ -30,59 +30,61 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     // nameController.text = 'modat123';
     // passwordController.text = 'Az123456789';
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                text(tr('FastTrans'), size: 25, color: Colors.blue),
-                InkWell(
-                  onTap: () => Navigator.pop(context),
-                  child: text(tr('sign in'), size: 20, color: Colors.blue),
-                )
-              ],
-            ),
-            SizedBox(height: 24),
-            text(tr('join Us'), size: 40, color: Colors.black),
-            SizedBox(height: 64),
-            RoundTextField(
-              hintText: "info@demouri.com",
-              hintTextColor: Color(0xFFB6C7D1),
-              hintFontSize: 14.0,
-              icon: Icons.mail_outline,
-              iconColor: Color(0xFFB6C7D1),
-              bottomPadding: 10,
-              controller: nameController,
-              enabledBorderSideColor: Colors.blue,
-              focusedBorderSideColor: Colors.blue,
-              isEmail: true,
-            ),
-            const SizedBox(height: 14),
-            RoundTextField(
-                isPassword: true,
-                hintText: "**********",
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  text(tr('FastTrans'), size: 25, color: Colors.blue),
+                  InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: text(tr('sign in'), size: 20, color: Colors.blue),
+                  )
+                ],
+              ),
+              SizedBox(height: 24),
+              text(tr('join Us'), size: 40, color: Colors.black),
+              SizedBox(height: 64),
+              RoundTextField(
+                hintText: "info@demouri.com",
                 hintTextColor: Color(0xFFB6C7D1),
                 hintFontSize: 14.0,
-                icon: Icons.lock,
+                icon: Icons.mail_outline,
                 iconColor: Color(0xFFB6C7D1),
-                controller: passwordController,
+                bottomPadding: 10,
+                controller: nameController,
                 enabledBorderSideColor: Colors.blue,
-                focusedBorderSideColor: Colors.blue),
-            const SizedBox(height: 14),
-            RoundElevatedButton(
-              buttonText: tr('login'),
-              color: Colors.blueAccent,
-              onPressed: submit,
-              radius: 30,
-              minimumSizeFromHeight: 55,
-            ),
-          ],
+                focusedBorderSideColor: Colors.blue,
+                isEmail: true,
+              ),
+              const SizedBox(height: 14),
+              RoundTextField(
+                  isPassword: true,
+                  hintText: "**********",
+                  hintTextColor: Color(0xFFB6C7D1),
+                  hintFontSize: 14.0,
+                  icon: Icons.lock,
+                  iconColor: Color(0xFFB6C7D1),
+                  controller: passwordController,
+                  enabledBorderSideColor: Colors.blue,
+                  focusedBorderSideColor: Colors.blue),
+              const SizedBox(height: 14),
+              RoundElevatedButton(
+                buttonText: tr('login'),
+                color: Colors.blueAccent,
+                onPressed: submit,
+                radius: 30,
+                minimumSizeFromHeight: 55,
+              ),
+            ],
+          ),
         ),
       ),
     );
