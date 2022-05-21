@@ -32,42 +32,152 @@ class _TextPageState extends State<TextPage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CaredWithColoredEdge(
-            100,
-            Colors.blueAccent,
-            Colors.red,
-            Direction.right,
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Row(
-                children: [
-                  const SizedBox(width: 5),
-                  Container(
-                    child: Image.asset('images/packagedetails.png',
-                        fit: BoxFit.fill),
-                  ),
-                  const SizedBox(width: 20),
-                  Container(
-                    child: text('test', color: Colors.white),
-                  ),
-                  const SizedBox(width: 5),
-                  Expanded(
-                    child: Container(
-                      //  color: Colors.red,
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        'Add long dddddddssssdddddddddddddddfsssssssssssffffffffffsssssssssssssssdddddddddddddddtext ',
-                        overflow: TextOverflow.visible,
-                      ),
+          child: myWidget(context),
+        ),
+      ),
+    );
+  }
+
+  Widget myCard() {
+    return Card(
+      color: Colors.blue,
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      elevation: 24.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: InkWell(
+        splashColor: Colors.blue.withAlpha(30),
+        onTap: () async {
+//no action
+        },
+        child: Container(
+          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+//   width: double.infinity,
+//    height: 200, //75  //no wrap to set indicator at end
+          child: Row(
+            children: <Widget>[
+//add expanded to get full view area
+              Expanded(
+                child: Column(
+//   mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+//  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'transfer',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.black54,
+                            letterSpacing: 1.5,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          "\u20B9 123",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.amberAccent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(width: 15),
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'transfer',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.black54,
+                            letterSpacing: 1.5,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          "\u20B9 123",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.amberAccent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'transfer',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.black54,
+                            letterSpacing: 1.5,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          "\u20B9 123",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.amberAccent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
+
+//  SizedBox(width: 20.0),
+
+              Container(
+                decoration: BoxDecoration(
+//  color: edgeColor, //Colors.black,
+                  border: Border.all(
+                    width: 4,
+// color: MyColor.TxtColorOrange,
+                    color: Colors.red,
+                  ),
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15.0),
+                      bottomRight: Radius.circular(15.0)),
+                ),
+              ),
+              SizedBox(width: 1.0),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget myWidget(BuildContext context) {
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: 2.37),
+          itemCount: 3,
+          itemBuilder: (BuildContext context, int index) {
+            return myCard() /*Card(
+              color: Colors.amber,
+              child: Center(child: Text('$index')),
+            )*/
+                ;
+          }),
     );
   }
 
