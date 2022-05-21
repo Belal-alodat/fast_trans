@@ -3,7 +3,37 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 class ExceptionHandler {
-  static String handleException(error) {
+  static const KUnAuthorized = "Unauthorized request";
+  static const kInvalidCredentials = "invalid Credentials";
+  static String handleResponse2(int statusCode) {
+    switch (statusCode) {
+      case 400:
+      case 401:
+      case 403:
+        return "Unauthorized request";
+        break;
+      case 404:
+        return "Not found";
+        break;
+      case 409:
+        return "Error due to a conflict";
+        break;
+      case 408:
+        return "Connection request timeout";
+        break;
+      case 500:
+        return "Internal Server Error";
+        break;
+      case 503:
+        return "Service unavailable";
+        break;
+      default:
+        var responseCode = statusCode;
+        return "Received invalid status code: $responseCode";
+    }
+  }
+
+  static String handleException(error, {String? page}) {
     // print('handleException');
     String errorMessage = "Unexpected error occurred";
 
@@ -45,8 +75,10 @@ class ExceptionHandler {
     switch (statusCode) {
       case 400:
       case 401:
+        message = ExceptionHandler.KUnAuthorized;
+        break;
       case 403:
-        message = "Unauthorized request";
+        message = ExceptionHandler.KUnAuthorized;
         break;
       case 404:
         message = "Not found";

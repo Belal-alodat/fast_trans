@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../core/app_session.dart';
+import '../providers/Auth.dart';
+import '../util/dialogue.dart';
 import '../util/exception_handler.dart';
 import '../widget/round_elevated_button.dart';
 import '../widget/round_text_field.dart';
@@ -31,8 +34,8 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // nameController.text = 'modat123';
-    // passwordController.text = 'Az123456789';
+    nameController.text = 't@com';
+    passwordController.text = '123123';
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -136,34 +139,19 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Future<void> submit() async {
-    // String username = nameController.value.text;
-    // String password = passwordController.value.text;
+    String username = nameController.value.text;
+    String password = passwordController.value.text;
     try {
-      //   print('username:$username');
-      //   print('password:$password');
+      print('username:$username');
+      print('password:$password');
       // Provider.of<Auth>(context, listen: false).
-      //  await Provider.of<Auth>(context, listen: false).login(username, password);
+      await Provider.of<Auth>(context, listen: false).login(username, password);
     } catch (error) {
       var errorMessage = ExceptionHandler.handleException(error);
-      _showErrorDialog(errorMessage);
+      if (errorMessage == ExceptionHandler.KUnAuthorized) {
+        errorMessage = ExceptionHandler.kInvalidCredentials;
+      }
+      Dialogs.showErrorDialog(errorMessage, context);
     }
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('An Error Occurred!'),
-        content: Text(message),
-        actions: <Widget>[
-          ElevatedButton(
-            child: const Text('Okay'),
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-          )
-        ],
-      ),
-    );
   }
 }

@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../util/exception_handler.dart';
+import '../providers/Auth.dart';
 import '../widget/round_elevated_button.dart';
 import '../widget/round_text_field.dart';
 
@@ -30,8 +31,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    // nameController.text = 'modat123';
-    // passwordController.text = 'Az123456789';
+    emailController.text = 't@com1';
+    passwordController.text = '123123';
+    nameController.text = 'Az123456789';
+    mobileController.text = '0569960717';
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -107,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
               RoundElevatedButton(
                 buttonText: tr('register'),
                 color: Colors.blueAccent,
-                onPressed: submit,
+                onPressed: register,
                 radius: 30,
                 minimumSizeFromHeight: 55,
               ),
@@ -118,39 +122,29 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void goToRegisterPage(BuildContext context) {
-    Navigator.pushNamed(context, '/register');
+  void goToLogin() {
+    Navigator.pushNamed(context, '/');
   }
 
-  Future<void> submit() async {
-    String username = emailController.value.text;
+  Future<void> register() async {
+    String email = emailController.value.text;
     String password = passwordController.value.text;
-    try {
-      print('username:$username');
-      print('password:$password');
-      // Provider.of<Auth>(context, listen: false).
-      //  await Provider.of<Auth>(context, listen: false).login(username, password);
-    } catch (error) {
-      var errorMessage = ExceptionHandler.handleException(error);
-      _showErrorDialog(errorMessage);
-    }
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text('An Error Occurred!'),
-        content: Text(message),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Okay'),
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-          )
-        ],
-      ),
+    String fullName = nameController.value.text;
+    String mobile = mobileController.value.text;
+    // try {
+    print('on register username:$email');
+    print('on register  password:$password');
+    print('on register  mobile:$mobile');
+    await Provider.of<Auth>(context, listen: false).register(
+      fullName: fullName,
+      password: password,
+      mobile: mobile,
+      email: email,
     );
+    goToLogin();
+    /*} catch (error) {
+      var errorMessage = ExceptionHandler.handleException(error);
+      Dialogs.showErrorDialog('tets $errorMessage', context);
+    }*/
   }
 }

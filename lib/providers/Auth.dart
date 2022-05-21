@@ -1,11 +1,10 @@
 import 'dart:core';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 
 import '../core/app_session.dart';
 import '../rest/customer_login_api.dart';
-import '../util/exception_handler.dart';
+import '../rest/customer_register_api.dart';
 
 class Auth with ChangeNotifier {
   bool _isAuth = false;
@@ -14,7 +13,7 @@ class Auth with ChangeNotifier {
 
   logout() {
     AppSession.instance.isLogin = false;
-
+    AppSession.instance.token = "";
     notifyListeners();
   }
 
@@ -35,57 +34,31 @@ class Auth with ChangeNotifier {
     CustomerLoginApi customerLoginApi = CustomerLoginApi();
     LoginRequest customerLoginRequest;
     LoginResponse customerLoginResponse;
-    try {
-      String lang_code = AppSession.instance.languageCode;
-      customerLoginRequest = LoginRequest(
-          userName: username, password: password, lang_code: lang_code);
 
-      customerLoginResponse =
-          await customerLoginApi.login(customerLoginRequest);
+    String lang_code = AppSession.instance.languageCode;
+    customerLoginRequest = LoginRequest(
+        userName: username, password: password, lang_code: lang_code);
 
-      AppSession.instance.isLogin = true;
+    customerLoginResponse = await customerLoginApi.login(customerLoginRequest);
 
-      // AppSession.instance.medicalCustomerId=customerLoginResponse.customer.medCustomerID;
-      // AppSession.instance.idNumber =customerLoginResponse.customer.iqamahID;
+    AppSession.instance.isLogin = true;
+    AppSession.instance.token = customerLoginResponse.token;
 
-      notifyListeners();
-    } catch (e) {
-      if (e is DioError) {
-        print('type=${e.type}');
-        print('handel' + handleResponse(e.response?.statusCode ?? 0));
-      }
-
-      print('sss=$e');
-      String test = ExceptionHandler.handleException(e);
-      print('error=$test');
-    }
+    notifyListeners();
   }
 
-  static String handleResponse(int statusCode) {
-    switch (statusCode) {
-      case 400:
-      case 401:
-      case 403:
-        return "Unauthorized request";
-        break;
-      case 404:
-        return "Not found";
-        break;
-      case 409:
-        return "Error due to a conflict";
-        break;
-      case 408:
-        return "Connection request timeout";
-        break;
-      case 500:
-        return "Internal Server Error";
-        break;
-      case 503:
-        return "Service unavailable";
-        break;
-      default:
-        var responseCode = statusCode;
-        return "Received invalid status code: $responseCode";
-    }
+  Future<void> register(
+      {required String email,
+      required String password,
+      required String fullName,
+      required String mobile}) async {
+    RegisterApi registerApi = RegisterApi();
+    RegisterRequest registerRequest = RegisterRequest(
+      fullName: fullName,
+      password: password,
+      mobile: mobile,
+      email: email,
+    );
+    await registerApi.register(registerRequest);
   }
 }

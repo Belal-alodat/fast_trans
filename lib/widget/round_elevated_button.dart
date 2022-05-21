@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class RoundElevatedButton extends StatelessWidget {
-  const RoundElevatedButton({
+  RoundElevatedButton({
     Key? key,
+    Widget? child,
     this.onPressed,
     this.radius = 35.0,
     this.minimumSizeFromHeight = 50.0,
@@ -11,7 +12,16 @@ class RoundElevatedButton extends StatelessWidget {
     this.textColor = Colors.black,
     this.textStyleFontFamily = 'loewm',
     this.textFontSize = 14,
-  }) : super(key: key);
+  }) : super(key: key) {
+    Widget child2 = Text(
+      buttonText,
+      style: TextStyle(
+          color: textColor,
+          fontSize: textFontSize,
+          fontFamily: textStyleFontFamily),
+    );
+    _child = child ?? child2;
+  }
 
   final VoidCallback? onPressed;
   final String buttonText;
@@ -22,12 +32,17 @@ class RoundElevatedButton extends StatelessWidget {
   final double textFontSize;
   final String textStyleFontFamily;
 
+  Widget? _child;
   @override
   Widget build(BuildContext context) {
+    MaterialStateProperty<Size?>? minimumSize = null;
+    if (minimumSizeFromHeight > 0)
+      minimumSize = MaterialStateProperty.all<Size>(
+          Size.fromHeight(minimumSizeFromHeight));
+
     return ElevatedButton(
         style: ButtonStyle(
-          minimumSize: MaterialStateProperty.all<Size>(
-              Size.fromHeight(minimumSizeFromHeight)),
+          minimumSize: minimumSize,
           foregroundColor: MaterialStateProperty.all<Color>(color),
           backgroundColor: MaterialStateProperty.all<Color>(color),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -38,12 +53,6 @@ class RoundElevatedButton extends StatelessWidget {
           ),
         ),
         onPressed: onPressed,
-        child: Text(
-          buttonText,
-          style: TextStyle(
-              color: textColor,
-              fontSize: textFontSize,
-              fontFamily: textStyleFontFamily),
-        ));
+        child: _child);
   }
 }

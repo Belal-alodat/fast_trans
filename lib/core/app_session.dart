@@ -10,22 +10,27 @@ class AppSession {
   Credential get credential => _credential;
 
   set credential(Credential credential) => _credential = credential;
-   
+
   static final AppSession _instance = AppSession._privateConstructor();
 
   static AppSession get instance => _instance;
   bool prefRead = false;
   String _languageCode = 'en';
   bool _isLogin = false;
+  String _token = '';
+  String get token => _token;
+
+  set token(String token) => _token = token;
+
   Credential _credential = Credential('', '');
 
   String get languageCode => _languageCode;
 
-  set languageCode(String languageCode) => this._languageCode = languageCode;
+  set languageCode(String languageCode) => _languageCode = languageCode;
 
   bool get isLogin => _isLogin;
 
-  set isLogin(bool login) => this._isLogin = login;
+  set isLogin(bool login) => _isLogin = login;
 
   double _safeAreaTextScalingFactor = 0.0;
 

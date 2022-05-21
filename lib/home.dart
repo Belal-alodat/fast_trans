@@ -21,6 +21,8 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("AppSession.instance.isLogin=${AppSession.instance.isLogin}");
+    print("AppSession.instance.token=${AppSession.instance.token}");
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
