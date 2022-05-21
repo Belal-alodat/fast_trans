@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../core/app_session.dart';
 import '../providers/Auth.dart';
+import '../widget/card_with_colored_edge.dart';
 import '../widget/round_elevated_button.dart';
 
 class AddShipmentPage extends StatefulWidget {
@@ -26,7 +27,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
 
   Widget build(BuildContext context) {
     double height = 50.0;
-    Direction diredction = AppSession.instance.languageCode == 'ar'
+    Direction direction = AppSession.instance.languageCode == 'ar'
         ? Direction.left
         : Direction.right;
     return Scaffold(
@@ -48,7 +49,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
                   height,
                   Colors.blueAccent,
                   Colors.red,
-                  diredction,
+                  direction,
                   // getWidget1('images/from.png', 'From'),
                   getWidget10('images/from.png', 'From', 'From From From',
                       Colors.white),
@@ -62,7 +63,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
                   height,
                   Colors.blueAccent,
                   Colors.red,
-                  diredction,
+                  direction,
                   getWidget10(
                       'images/to.png', 'To', 'To To To To', Colors.white),
                   row3children: getRow3Widget(height),
@@ -75,7 +76,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
                   height,
                   Colors.blueAccent,
                   Colors.red,
-                  diredction,
+                  direction,
                   getWidget10('images/packagedetails.png', 'Package Details',
                       'Package Details', Colors.white),
                   row3children: getRow3Widget(height),
@@ -211,7 +212,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
   }
 
   void from() {
-    Navigator.pushNamed(context, '/text');
+    Navigator.pushNamed(context, '/list-addresses');
   }
 
   void PackageDetails() {
@@ -219,88 +220,6 @@ class _AddShipmentState extends State<AddShipmentPage> {
   }
 
   void To() {
-    Navigator.pushNamed(context, '/text');
-  }
-}
-
-enum Direction { right, left }
-
-class CaredWithColoredEdge extends StatelessWidget {
-  final double height;
-  final Color backGroundColor;
-  final Color edgeColor;
-  final Direction direction;
-  final Widget child;
-  List<Widget>? row3children;
-  CaredWithColoredEdge(
-    this.height,
-    this.backGroundColor,
-    this.edgeColor,
-    this.direction,
-    this.child, {
-    List<Widget>? row3children,
-    Key? key,
-  }) : super(key: key) {
-    this.row3children = row3children;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var aligDirection = direction == Direction.right
-        ? MainAxisAlignment.end
-        : MainAxisAlignment.end;
-    var borderDirection = direction == Direction.right
-        ? BorderRadius.only(
-            topRight: Radius.circular(10.0), bottomRight: Radius.circular(10.0))
-        : BorderRadius.only(
-            topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0));
-    return Stack /*Column*/ (
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: height,
-                decoration: BoxDecoration(
-                  color: backGroundColor,
-                  border: Border.all(
-                    width: 4,
-                    // color: MyColor.TxtColorOrange,
-                    color: backGroundColor,
-                  ),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: child,
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: aligDirection,
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: height,
-              //  width: 5,
-              decoration: BoxDecoration(
-                //  color: edgeColor, //Colors.black,
-                border: Border.all(
-                  width: 4,
-                  // color: MyColor.TxtColorOrange,
-                  color: edgeColor,
-                ),
-                borderRadius: borderDirection,
-              ),
-            ),
-          ],
-        ),
-        if (row3children != null)
-          Row(
-            mainAxisAlignment: aligDirection,
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: row3children ?? const <Widget>[],
-          ),
-      ],
-    );
+    Navigator.pushNamed(context, '/list-addresses');
   }
 }

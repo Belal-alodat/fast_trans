@@ -6,6 +6,7 @@ import './generated/codegen_loader.g.dart';
 import 'register_home.dart';
 import 'screen/Text_page.dart';
 import 'screen/add_shipment_page.dart';
+import 'screen/list_addresses_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/register': (context) => RegisterHomeScreen(),
         '/shipment': (context) => AddShipmentPage(),
-        '/text': (context) => TextPage(),
+        '/list-addresses': (context) => ListAddressesPage(),
         '/text': (context) => TextPage(),
       },
     );
