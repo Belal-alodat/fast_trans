@@ -31,7 +31,7 @@ class HomeScreenState extends State<HomeScreen> {
       ],
       child: Consumer<Auth>(
           builder: (ctx, auth, _) =>
-              AppSession.instance.isLogin ? MainPage() : const LoginPage()),
+              !AppSession.instance.isLogin ? MainPage() : const LoginPage()),
     );
   }
 }

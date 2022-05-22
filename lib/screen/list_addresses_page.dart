@@ -4,12 +4,15 @@ import '../core/app_session.dart';
 import '../widget/card_with_colored_edge.dart';
 
 class ListAddressesPage extends StatefulWidget {
+  const ListAddressesPage();
   @override
   _ListAddressesState createState() => _ListAddressesState();
 }
 
 class _ListAddressesState extends State<ListAddressesPage> {
   Widget build(BuildContext context) {
+    final title = ModalRoute.of(context)!.settings.arguments as String;
+
     double height = 150.0;
     Direction direction = AppSession.instance.languageCode == 'ar'
         ? Direction.left
@@ -17,11 +20,15 @@ class _ListAddressesState extends State<ListAddressesPage> {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
+        onPressed: () {
+          Navigator.pushNamed(context, '/address');
+        },
+        tooltip: 'Create Address',
         child: const Icon(Icons.add),
       ),
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: text(title),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -44,9 +51,10 @@ class _ListAddressesState extends State<ListAddressesPage> {
             print('selected cared index $i');
           },
           child: CaredWithColoredEdge(
+            isRedEdge: false,
             row3children: getRow3Widget(120, i),
             120,
-            Colors.blueAccent,
+            Colors.blue.shade900,
             Colors.red,
             direction,
             // getWidget1('images/from.png', 'From'),
@@ -59,7 +67,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
 
   Widget text(
     String text, {
-    Color color = Colors.black,
+    Color color = Colors.white,
     double size = 14,
     String font = 'm',
   }) {
@@ -77,10 +85,10 @@ class _ListAddressesState extends State<ListAddressesPage> {
           children: [
             Container(
               height: height / 2,
-              color: Colors.amberAccent,
+              //   color: Colors.amberAccent,
               child: InkWell(
                 onTap: () {
-                  print('selected Icone index $index');
+                  print('selected edit Icone index $index');
                 },
                 child: Icon(
                   Icons.edit,
@@ -95,7 +103,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
               //  color: Colors.amberAccent,
               child: InkWell(
                 onTap: () {
-                  print('selected Icone index $index');
+                  print('selected share index $index');
                 },
                 child: Icon(
                   Icons.share,

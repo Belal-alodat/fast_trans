@@ -4,6 +4,7 @@ enum Direction { right, left }
 
 class CaredWithColoredEdge extends StatelessWidget {
   final double height;
+  final bool isRedEdge;
   final Color backGroundColor;
   final Color edgeColor;
   final Direction direction;
@@ -15,6 +16,7 @@ class CaredWithColoredEdge extends StatelessWidget {
     this.edgeColor,
     this.direction,
     this.child, {
+    this.isRedEdge = true,
     List<Widget>? row3children,
     Key? key,
   }) : super(key: key) {
@@ -35,42 +37,59 @@ class CaredWithColoredEdge extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(
-              child: Container(
+            if (isRedEdge)
+              Expanded(
+                child: Container(
+                  height: height,
+                  decoration: BoxDecoration(
+                    color: backGroundColor,
+                    border: Border.all(
+                      width: 4,
+                      // color: MyColor.TxtColorOrange,
+                      color: backGroundColor,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: child,
+                ),
+              ),
+            if (!isRedEdge)
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: backGroundColor,
+                    border: Border.all(
+                      width: 4,
+                      // color: MyColor.TxtColorOrange,
+                      color: backGroundColor,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: child,
+                ),
+              ),
+          ],
+        ),
+        if (isRedEdge)
+          Row(
+            mainAxisAlignment: aligDirection,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
                 height: height,
+                //  width: 5,
                 decoration: BoxDecoration(
-                  color: backGroundColor,
+                  //  color: edgeColor, //Colors.black,
                   border: Border.all(
                     width: 4,
                     // color: MyColor.TxtColorOrange,
-                    color: backGroundColor,
+                    color: edgeColor,
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: borderDirection,
                 ),
-                child: child,
               ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: aligDirection,
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: height,
-              //  width: 5,
-              decoration: BoxDecoration(
-                //  color: edgeColor, //Colors.black,
-                border: Border.all(
-                  width: 4,
-                  // color: MyColor.TxtColorOrange,
-                  color: edgeColor,
-                ),
-                borderRadius: borderDirection,
-              ),
-            ),
-          ],
-        ),
+            ],
+          ),
         if (row3children != null)
           Row(
             mainAxisAlignment: aligDirection,

@@ -79,6 +79,7 @@ class LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 14),
               RoundTextField(
+                  isRadius: false,
                   isPassword: true,
                   hintText: "**********",
                   hintTextColor: const Color(0xFFB6C7D1),

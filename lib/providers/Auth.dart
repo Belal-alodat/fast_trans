@@ -3,12 +3,13 @@ import 'dart:core';
 import 'package:flutter/widgets.dart';
 
 import '../core/app_session.dart';
+import '../rest/address_api.dart';
 import '../rest/customer_login_api.dart';
 import '../rest/customer_register_api.dart';
 
 class Auth with ChangeNotifier {
   bool _isAuth = false;
-
+  AddressResponse addressResponse = AddressResponse.fromJson(addresses);
   get isAuth => AppSession.instance.isLogin;
 
   logout() {

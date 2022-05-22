@@ -47,7 +47,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
                 onTap: from,
                 child: CaredWithColoredEdge(
                   height,
-                  Colors.blueAccent,
+                  Colors.blue.shade900,
                   Colors.red,
                   direction,
                   // getWidget1('images/from.png', 'From'),
@@ -61,7 +61,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
                 onTap: To,
                 child: CaredWithColoredEdge(
                   height,
-                  Colors.blueAccent,
+                  Colors.blue.shade900,
                   Colors.red,
                   direction,
                   getWidget10(
@@ -74,7 +74,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
                 onTap: PackageDetails,
                 child: CaredWithColoredEdge(
                   height,
-                  Colors.blueAccent,
+                  Colors.blue.shade900,
                   Colors.red,
                   direction,
                   getWidget10('images/packagedetails.png', 'Package Details',
@@ -212,14 +212,14 @@ class _AddShipmentState extends State<AddShipmentPage> {
   }
 
   void from() {
-    Navigator.pushNamed(context, '/list-addresses');
+    Navigator.pushNamed(context, '/list-addresses', arguments: 'From Address');
   }
 
   void PackageDetails() {
-    Navigator.pushNamed(context, '/text');
+    Navigator.pushNamed(context, '/text2');
   }
 
   void To() {
-    Navigator.pushNamed(context, '/list-addresses');
+    Navigator.pushNamed(context, '/list-addresses', arguments: 'To Address');
   }
 }
