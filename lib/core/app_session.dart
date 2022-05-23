@@ -2,10 +2,22 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
+import '../models/shipment_package.dart';
 import '../models/user_credentails.dart';
+import '../rest/address_api.dart';
 
 class AppSession {
   AppSession._privateConstructor();
+  List<Address> fromAddresses = [];
+  List<Address> toAddresses = [];
+  List<ShipmentPackage> packages = [];
+
+  Map<String, City> getcities() {
+    AddressResponse addressResponse = AddressResponse.fromJson(addressesAsJson);
+    Map<String, City> cities = addressResponse.cities;
+
+    return cities;
+  }
 
   Credential get credential => _credential;
 

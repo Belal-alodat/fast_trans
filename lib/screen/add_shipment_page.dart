@@ -1,8 +1,10 @@
+import 'package:fast_trans/rest/address_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/app_session.dart';
 import '../providers/Auth.dart';
+import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 import '../widget/round_elevated_button.dart';
 
@@ -12,31 +14,32 @@ class AddShipmentPage extends StatefulWidget {
 }
 
 class _AddShipmentState extends State<AddShipmentPage> {
-  Widget text(
-    String text, {
-    Color color = Colors.black,
-    double size = 14,
-    String font = 'm',
-  }) {
-    return Text(
-      text,
-      style: TextStyle(color: color, fontSize: size, fontFamily: 'loew$font'),
-      softWrap: true,
+  Address? toAddress;
+  Address? fromAddress;
+
+  Widget getCard(
+      String image, String label, String ObjectString, Direction direction) {
+    double height = 50.0;
+
+    return CaredWithColoredEdge(
+      height,
+      Colors.blue.shade900,
+      Colors.red,
+      direction,
+      getCardWidgets(image, label, ObjectString, Colors.white),
+      row3children: getCardRow3Widget(height),
     );
   }
 
   Widget build(BuildContext context) {
-    double height = 50.0;
     Direction direction = AppSession.instance.languageCode == 'ar'
         ? Direction.left
         : Direction.right;
+
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
-        child: /*Stack(
-          alignment: Alignment.center,
-          children: [*/
-            SingleChildScrollView(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -45,42 +48,20 @@ class _AddShipmentState extends State<AddShipmentPage> {
               const SizedBox(height: 24),
               InkWell(
                 onTap: from,
-                child: CaredWithColoredEdge(
-                  height,
-                  Colors.blue.shade900,
-                  Colors.red,
-                  direction,
-                  // getWidget1('images/from.png', 'From'),
-                  getWidget10('images/from.png', 'From', 'From From From',
-                      Colors.white),
-                  row3children: getRow3Widget(height),
-                ),
+                child: getCard('images/from.png', 'From',
+                    '${fromAddress?.fullName}', direction),
               ),
               const SizedBox(height: 24),
               InkWell(
-                onTap: To,
-                child: CaredWithColoredEdge(
-                  height,
-                  Colors.blue.shade900,
-                  Colors.red,
-                  direction,
-                  getWidget10(
-                      'images/to.png', 'To', 'To To To To', Colors.white),
-                  row3children: getRow3Widget(height),
-                ),
+                onTap: to,
+                child: getCard(
+                    'images/to.png', 'To', '${toAddress?.fullName}', direction),
               ),
               const SizedBox(height: 24),
               InkWell(
                 onTap: PackageDetails,
-                child: CaredWithColoredEdge(
-                  height,
-                  Colors.blue.shade900,
-                  Colors.red,
-                  direction,
-                  getWidget10('images/packagedetails.png', 'Package Details',
-                      'Package Details', Colors.white),
-                  row3children: getRow3Widget(height),
-                ),
+                child: getCard('images/packagedetails.png', 'Package Details',
+                    'Package Details', direction),
               ),
               Padding(
                 padding:
@@ -112,18 +93,12 @@ class _AddShipmentState extends State<AddShipmentPage> {
             ],
           ),
         ),
-        /*],
-        ),*/
       ),
     );
   }
 
-  logout() async {
-    await Provider.of<Auth>(context, listen: false).logout();
-  }
-
   Widget getButtonText(String text2) {
-    Widget child2 = text(text2, color: Colors.white);
+    Widget child2 = WidgetUtil.text(text2, color: Colors.white);
     Widget c2 = Container(
       alignment: Alignment.center,
       //color: Colors.red,
@@ -135,7 +110,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
     return c2;
   }
 
-  Widget getWidget10(String imagePath, String textLabel1, String textLabel2,
+  Widget getCardWidgets(String imagePath, String textLabel1, String textLabel2,
       Color backgroundColor) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -148,7 +123,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
           ),
           const SizedBox(width: 20),
           Container(
-            child: text(textLabel1, color: backgroundColor),
+            child: WidgetUtil.text(textLabel1, color: backgroundColor),
           ),
           const SizedBox(width: 15),
           Expanded(
@@ -168,13 +143,13 @@ class _AddShipmentState extends State<AddShipmentPage> {
     );
   }
 
-  List<Widget> getRow3Widget(double height) {
+  List<Widget> getCardRow3Widget(double height) {
     return [
       Center(
         child: Container(
           height: height,
           //  color: Colors.amberAccent,
-          child: Icon(
+          child: const Icon(
             Icons.arrow_forward_ios_sharp,
             color: Colors.white,
             //size: 30,
@@ -186,40 +161,44 @@ class _AddShipmentState extends State<AddShipmentPage> {
     ];
   }
 
-  Widget getWidget1(
-    String imagePath,
-    String textLabel,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(children: [
-            Container(
-              color: Colors.red,
-              child: Image.asset(imagePath, fit: BoxFit.fill),
-            ),
-            const SizedBox(width: 20),
-            Container(
-              color: Colors.red,
-              child: text(textLabel, color: Colors.white),
-            ),
-          ]),
-        ],
-      ),
-    );
+  logout() async {
+    await Provider.of<Auth>(context, listen: false).logout();
   }
 
-  void from() {
-    Navigator.pushNamed(context, '/list-addresses', arguments: 'From Address');
+  void from() async {
+    final result = await Navigator.pushNamed(context, '/list-addresses',
+        arguments: 'From');
+    print('From list index =${result.toString()}');
+
+    try {
+      int index = int.parse(result!.toString());
+
+      setState(() {
+        fromAddress = AppSession.instance.fromAddresses[index];
+      });
+      print('fromAddress ${fromAddress?.fullName}');
+    } catch (e) {
+      print('null result');
+    }
+  }
+
+  void to() async {
+    final result =
+        await Navigator.pushNamed(context, '/list-addresses', arguments: 'To');
+    print('To list index =${result.toString()}');
+    try {
+      int index = int.parse(result!.toString());
+      setState(() {
+        toAddress = AppSession.instance.toAddresses[index];
+      });
+
+      print('toAddress ${toAddress?.fullName}');
+    } catch (e) {
+      print('null result');
+    }
   }
 
   void PackageDetails() {
-    Navigator.pushNamed(context, '/text2');
-  }
-
-  void To() {
-    Navigator.pushNamed(context, '/list-addresses', arguments: 'To Address');
+    Navigator.pushNamed(context, '/list-package');
   }
 }

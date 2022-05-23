@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fast_trans/home.dart';
+import 'package:fast_trans/screen/package_details.dart';
 import 'package:flutter/material.dart';
 
 import './generated/codegen_loader.g.dart';
@@ -8,7 +9,9 @@ import 'screen/TextFieldExample.dart';
 import 'screen/Text_page.dart';
 import 'screen/add_shipment_page.dart';
 import 'screen/addresses_page.dart';
+import 'screen/counter.dart';
 import 'screen/list_addresses_page.dart';
+import 'screen/list_packages_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +60,9 @@ class MyApp extends StatelessWidget {
         '/address': (context) => AddressesPage(),
         '/text2': (context) => TextFieldExample(),
         '/text': (context) => RegisterHomeScreen(),
+        '/counter': (context) => Counter(),
+        '/package': (context) => PackageDetailsPage(),
+        '/list-package': (context) => ListPackagesPage(),
       },
     );
   }

@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
 
 import '../core/app_session.dart';
-import '../rest/address_api.dart';
+import '../models/shipment_package.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 
-class ListAddressesPage extends StatefulWidget {
-  const ListAddressesPage();
+class ListPackagesPage extends StatefulWidget {
+  const ListPackagesPage();
   @override
-  _ListAddressesState createState() => _ListAddressesState();
+  _ListPackagesState createState() => _ListPackagesState();
 }
 
-class _ListAddressesState extends State<ListAddressesPage> {
+class _ListPackagesState extends State<ListPackagesPage> {
   int _counter = 0;
   Widget build(BuildContext context) {
-    List<Address> addresses = AppSession.instance.fromAddresses;
-    final title = ModalRoute.of(context)!.settings.arguments as String;
-    if (title == 'To') {
-      print('toAddresses');
-      addresses = AppSession.instance.toAddresses;
-    } else {
-      print('fromAddresses');
-    }
+    String title = 'packages';
+    List<ShipmentPackage> packages = AppSession.instance.packages;
 
     print('_ListAddressesState build ');
     double height = 150.0;
@@ -33,14 +27,12 @@ class _ListAddressesState extends State<ListAddressesPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           //_counter++;
-          await Navigator.pushNamed(context, '/address', arguments: title);
-          //Address address2 = addr2!;
-          //AppSession.instance.addresses.add(address2);
+          await Navigator.pushNamed(context, '/package', arguments: title);
           setState(() {
             print('setState ');
           });
         },
-        tooltip: 'Create Address',
+        tooltip: 'Create Package',
         child: const Icon(Icons.add),
       ),
       appBar: AppBar(
@@ -52,7 +44,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: getChildren(addresses, height, direction),
+            children: getChildren(packages, height, direction),
           ),
         ),
       ),
@@ -60,9 +52,9 @@ class _ListAddressesState extends State<ListAddressesPage> {
   }
 
   List<Widget> getChildren(
-      List<Address> addresses, double height, Direction direction) {
+      List<ShipmentPackage> packages, double height, Direction direction) {
     List<Widget> children = [];
-    for (int i = 0; i < addresses.length; i++) {
+    for (int i = 0; i < packages.length; i++) {
       children.add(const SizedBox(height: 10));
       children.add(InkWell(
           onTap: () {
@@ -77,7 +69,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
             Colors.red,
             direction,
             // getWidget1('images/from.png', 'From'),
-            getWidget10(addresses[i], Colors.white),
+            getWidget10(packages[i], Colors.white),
           )));
     }
     return children;
@@ -125,7 +117,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
     ];
   }
 
-  Widget getWidget10(Address address, Color backgroundColor) {
+  Widget getWidget10(ShipmentPackage shipmentPackage, Color backgroundColor) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
       child: Column(
@@ -146,7 +138,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
                   //  color: Colors.red,
                   child: Text(
                     textAlign: TextAlign.center,
-                    address.fullName,
+                    shipmentPackage.product.name,
                     overflow: TextOverflow.ellipsis,
                     style:
                         TextStyle(color: backgroundColor, fontFamily: 'loewm'),
@@ -160,7 +152,8 @@ class _ListAddressesState extends State<ListAddressesPage> {
             children: [
               Container(
                 //   color: Colors.red,
-                child: WidgetUtil.text('Address', color: backgroundColor),
+                child: WidgetUtil.text('price\nweight\npieces',
+                    color: backgroundColor),
               ),
               SizedBox(width: 15),
               Container(
@@ -172,7 +165,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
                   //  color: Colors.red,
                   child: Text(
                     textAlign: TextAlign.center,
-                    '${address.city.name}-${address.town.name}-${address.village.name}',
+                    '${shipmentPackage.price}-${shipmentPackage.weight}-${shipmentPackage.pieces}',
                     overflow: TextOverflow.ellipsis,
                     style:
                         TextStyle(color: backgroundColor, fontFamily: 'loewm'),
@@ -186,8 +179,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
             children: [
               Container(
                 //  color: Colors.red,
-                child:
-                    WidgetUtil.text('Mobile\nNumber', color: backgroundColor),
+                child: WidgetUtil.text('Dimension', color: backgroundColor),
               ),
               SizedBox(width: 15),
               Container(
@@ -199,7 +191,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
                   //  color: Colors.red,
                   child: Text(
                     textAlign: TextAlign.center,
-                    address.mobile,
+                    shipmentPackage.dimension.name,
                     overflow: TextOverflow.ellipsis,
                     style:
                         TextStyle(color: backgroundColor, fontFamily: 'loewm'),

@@ -16,7 +16,7 @@ class AddressApi extends SupplierAPI {
 class Village {
   int id = -1;
   String name = '';
-
+  Village(this.name);
   Village.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     //print('id=$id');
@@ -27,6 +27,7 @@ class Village {
 class Town {
   int id = -1;
   String name = '';
+  Town(this.name);
   Map<String, Village> villages = {};
 
   Town.fromJson(Map<String, dynamic> json) {
@@ -46,7 +47,7 @@ class City {
   int id = -1;
   String name = '';
   Map<String, Town> towns = {};
-
+  City(this.name);
   City.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     // print('id=$id');
@@ -58,6 +59,25 @@ class City {
       towns[townName] = Town.fromJson(town);
     }
   }
+}
+
+class Address {
+  final City city;
+  final Town town;
+  final Village village;
+  final String street;
+  final int buildingNumber;
+  final String mobile;
+  final String fullName;
+  Address({
+    required this.street,
+    required this.buildingNumber,
+    required this.mobile,
+    required this.fullName,
+    required this.city,
+    required this.town,
+    required this.village,
+  });
 }
 
 class AddressResponse {
@@ -76,7 +96,7 @@ class AddressResponse {
 
 main() {
   print('hi');
-  AddressResponse s = AddressResponse.fromJson(addresses);
+  AddressResponse s = AddressResponse.fromJson(addressesAsJson);
 
   print('s=${s.cities.length}');
   s.cities.forEach((key, city) {
@@ -90,7 +110,7 @@ main() {
   });
 }
 
-List<Map<String, dynamic>> addresses = [
+List<Map<String, dynamic>> addressesAsJson = [
   {
     "id": 1,
     "name": "city1",

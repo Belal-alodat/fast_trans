@@ -37,7 +37,7 @@ class _MainPageState extends State<MainPage> {
     // passwordController.text = 'Az123456789';
     List<ItemMenuType> itemTypeList = [
       ItemMenuType('test1', false, "images/cust$lang.png", '/shipment'),
-      ItemMenuType('test2', false, "images/Gps$lang.png", '/shipment'),
+      ItemMenuType('test2', false, "images/Gps$lang.png", '/counter'),
       ItemMenuType('test3', false, "images/myShipments$lang.png", '/shipment'),
       ItemMenuType('test4', false, "images/pickupfill$lang.png", '/shipment'),
       ItemMenuType('test5', false, "images/Track$lang.png", '/shipment'),

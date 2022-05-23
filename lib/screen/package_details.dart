@@ -6,21 +6,21 @@ import '../widget/card_with_colored_edge.dart';
 import '../widget/round_elevated_button.dart';
 import '../widget/round_text_field.dart';
 
-class AddressesPage extends StatefulWidget {
+class PackageDetailsPage extends StatefulWidget {
   @override
-  _AddressesState createState() => _AddressesState();
+  _PackageDetailsState createState() => _PackageDetailsState();
 }
 
-class _AddressesState extends State<AddressesPage> {
+class _PackageDetailsState extends State<PackageDetailsPage> {
   bool _isSaveing = false;
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController streetController = TextEditingController();
-  final TextEditingController mobileController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController piecesController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
   final TextEditingController buildingNumberController =
       TextEditingController();
-  final TextEditingController cityController = TextEditingController();
+  final TextEditingController productController = TextEditingController();
   final TextEditingController villageController = TextEditingController();
-  final TextEditingController townController = TextEditingController();
+  final TextEditingController dimensionController = TextEditingController();
   Map<String, City> cities = {};
   @override
   void didChangeDependencies() {
@@ -43,18 +43,16 @@ class _AddressesState extends State<AddressesPage> {
         : Direction.right;
 
     return Scaffold(
-      appBar: AppBar(title: text('Create Address', color: Colors.white)),
+      appBar: AppBar(title: text('Create Package', color: Colors.white)),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: CaredWithColoredEdge(
             isRedEdge: false,
-            //  row3children: getRow3Widget(120, 1),
             620,
             Colors.blue.shade900,
             Colors.red,
             direction,
-            // getWidget1('images/from.png', 'From'),
             getWidget10(),
           ),
         ),
@@ -180,24 +178,24 @@ class _AddressesState extends State<AddressesPage> {
       child: Column(
         children: [
           //  _buildTextField('Full Name', nameController),
-          _buildTextField('Full Name', nameController),
-          _buildTextField('mobile', mobileController),
-          _buildTextField('street', streetController),
-          _buildTextField('Building Number', buildingNumberController),
+          _buildTextField('price', priceController),
+          _buildTextField('weight', weightController),
+          _buildTextField('pieces', piecesController),
+
           //dd
           _buildTextField(
-            'city',
-            cityController,
+            'product',
+            productController,
             isDrop: true,
             items: citiesList,
             onSelected: (String value) {
-              if (value == cityController.text) return;
+              if (value == productController.text) return;
               townList = [];
-              townController.text = '';
+              dimensionController.text = '';
               villageController.text = '';
               setState(() {
                 print('setState');
-                cityController.text = value;
+                productController.text = value;
               });
               City? city = cities[value];
               city?.towns?.forEach((key, value) {
@@ -206,34 +204,22 @@ class _AddressesState extends State<AddressesPage> {
             },
           ),
           _buildTextField(
-            'town',
-            townController,
+            'dimension',
+            dimensionController,
             isDrop: true,
             items: townList,
             onSelected: (String value) {
-              if (value == townController.text) return;
+              if (value == dimensionController.text) return;
               setState(() {
                 print('setState');
-                townController.text = value;
+                dimensionController.text = value;
               });
               villageList = [];
               villageController.text = '';
-              City? city = cities[cityController.text];
+              City? city = cities[productController.text];
               Town? town = city?.towns[value];
               town?.villages?.forEach((key, value) {
                 villageList.add(key);
-              });
-            },
-          ),
-          _buildTextField(
-            'village',
-            villageController,
-            isDrop: true,
-            items: villageList,
-            onSelected: (String value) {
-              setState(() {
-                print('setState');
-                villageController.text = value;
               });
             },
           ),
@@ -288,12 +274,12 @@ class _AddressesState extends State<AddressesPage> {
       _isSaveing = true;
     });
     print('_submit ');
-    String name = nameController.text;
-    String street = streetController.text;
-    String mobile = mobileController.text;
+    String name = priceController.text;
+    String street = piecesController.text;
+    String mobile = weightController.text;
     String buildingNumber = buildingNumberController.text;
-    String city = cityController.text;
-    String town = townController.text;
+    String city = productController.text;
+    String town = dimensionController.text;
     String village = villageController.text;
     // await Future.delayed(const Duration(seconds: 2));
     Address address2 = Address(
@@ -318,12 +304,12 @@ class _AddressesState extends State<AddressesPage> {
   void _reset() {
     print('_reset ');
 
-    nameController.text = 'full name ali';
-    streetController.text = 'street ali';
-    mobileController.text = '0569960717';
+    priceController.text = 'full name ali';
+    piecesController.text = 'street ali';
+    weightController.text = '0569960717';
     buildingNumberController.text = '12';
-    cityController.text = 'city1';
-    townController.text = 'city1-town1';
+    productController.text = 'city1';
+    dimensionController.text = 'city1-town1';
     villageController.text = 'city1-town1-village1';
   }
 }
