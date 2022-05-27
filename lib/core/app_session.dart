@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fast_trans/rest/package_api.dart';
 import 'package:flutter/widgets.dart';
 
 import '../models/shipment_package.dart';
@@ -18,7 +19,16 @@ class AppSession {
 
     return cities;
   }
-
+  Map<String, Product> getProducts() {
+    ProductResponse productResponse = ProductResponse.fromJson(productsAsJson);
+    Map<String, Product> products = productResponse.products;
+    return products;
+  }
+  Map<String, Dimension> getDimensions() {
+    DimensionResponse productResponse = DimensionResponse.fromJson(dimensionsAsJson);
+    Map<String, Dimension> dimensions = productResponse.dimensions;
+    return dimensions;
+  }
   Credential get credential => _credential;
 
   set credential(Credential credential) => _credential = credential;

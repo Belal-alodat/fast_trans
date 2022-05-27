@@ -2,6 +2,7 @@ import 'package:fast_trans/rest/address_api.dart';
 import 'package:flutter/material.dart';
 
 import '../core/app_session.dart';
+import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 import '../widget/round_elevated_button.dart';
 import '../widget/round_text_field.dart';
@@ -43,11 +44,11 @@ class _AddressesState extends State<AddressesPage> {
         : Direction.right;
 
     return Scaffold(
-      appBar: AppBar(title: text('Create Address', color: Colors.white)),
+      appBar: AppBar(title: WidgetUtil.text('Create Address', color: Colors.white)),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: CaredWithColoredEdge(
+          child: CardWithColoredEdge(
             isRedEdge: false,
             //  row3children: getRow3Widget(120, 1),
             620,
@@ -62,7 +63,7 @@ class _AddressesState extends State<AddressesPage> {
     );
   }
 
-  Widget text(
+  /*Widget text(
     String text, {
     Color color = Colors.white,
     double size = 14,
@@ -73,56 +74,16 @@ class _AddressesState extends State<AddressesPage> {
       style: TextStyle(color: color, fontSize: size, fontFamily: 'loew$font'),
       softWrap: true,
     );
-  }
+  }*/
 
-  List<Widget> getRow3Widget(double height, int index) {
-    return [
-      Center(
-        child: Column(
-          children: [
-            Container(
-              height: height / 2,
-              //   color: Colors.amberAccent,
-              child: InkWell(
-                onTap: () {
-                  print('selected edit Icone index $index');
-                },
-                child: Icon(
-                  Icons.edit,
-                  color: Colors.white70,
-                  //size: 30,
-                ),
-              ),
-              //  color: Colors.black,
-            ),
-            Container(
-              height: height / 2,
-              //  color: Colors.amberAccent,
-              child: InkWell(
-                onTap: () {
-                  print('selected share index $index');
-                },
-                child: Icon(
-                  Icons.share,
-                  color: Colors.white70,
-                  //size: 30,
-                ),
-              ),
-              //  color: Colors.black,
-            ),
-          ],
-        ),
-      ),
-      const SizedBox(width: 8),
-    ];
-  }
+
 
 // Initial Selected Value
   String dropdownvalue = 'Item 1';
   // List of items in our dropdown menu
   List<String> townList = [];
   List<String> villageList = [];
-  Widget getDropdownButton() {
+  /*Widget getDropdownButton() {
     return DropdownButton(
       // Initial Value
       value: dropdownvalue,
@@ -145,7 +106,7 @@ class _AddressesState extends State<AddressesPage> {
         });
       },
     );
-  }
+  }*/
 
   Widget _buildTextField(
     String labelText,
@@ -246,7 +207,7 @@ class _AddressesState extends State<AddressesPage> {
                 children: [
                   Expanded(
                     child: RoundElevatedButton(
-                      child: getButtonText('Submit'),
+                      child: WidgetUtil.getButtonText('Submit',35),
                       color: Colors.blueGrey,
                       onPressed: _isSaveing ? null : _submit,
                       radius: 30,
@@ -256,7 +217,7 @@ class _AddressesState extends State<AddressesPage> {
                   const SizedBox(width: 24),
                   Expanded(
                     child: RoundElevatedButton(
-                      child: getButtonText('Reset'),
+                      child:  WidgetUtil.getButtonText('Reset',35),
                       color: Colors.blueGrey,
                       onPressed: _reset,
                       radius: 30,
@@ -270,8 +231,8 @@ class _AddressesState extends State<AddressesPage> {
     );
   }
 
-  Widget getButtonText(String text2) {
-    Widget child2 = text(text2, color: Colors.white);
+  /*Widget getButtonText(String text2) {
+    Widget child2 = WidgetUtil.text(text2, color: Colors.white);
     Widget c2 = Container(
       alignment: Alignment.center,
       //color: Colors.red,
@@ -281,7 +242,7 @@ class _AddressesState extends State<AddressesPage> {
       child: child2,
     );
     return c2;
-  }
+  }*/
 
   void _submit() async {
     setState(() {

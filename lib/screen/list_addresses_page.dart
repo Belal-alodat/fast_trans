@@ -69,7 +69,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
             print('selected cared index $i');
             Navigator.pop(context, '$i');
           },
-          child: CaredWithColoredEdge(
+          child: CardWithColoredEdge(
             isRedEdge: false,
             row3children: getRow3Widget(120, i),
             120,

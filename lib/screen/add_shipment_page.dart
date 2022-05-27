@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/app_session.dart';
+import '../models/shipment_package.dart';
 import '../providers/Auth.dart';
+import '../rest/shipment_api.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 import '../widget/round_elevated_button.dart';
@@ -16,17 +18,17 @@ class AddShipmentPage extends StatefulWidget {
 class _AddShipmentState extends State<AddShipmentPage> {
   Address? toAddress;
   Address? fromAddress;
-
+  ShipmentPackage? shipmentPackage;
   Widget getCard(
       String image, String label, String ObjectString, Direction direction) {
     double height = 50.0;
 
-    return CaredWithColoredEdge(
+    return CardWithColoredEdge(
       height,
       Colors.blue.shade900,
       Colors.red,
       direction,
-      getCardWidgets(image, label, ObjectString, Colors.white),
+      getCardWidgets(image, label, ObjectString == null  ? '': ObjectString, Colors.white),
       row3children: getCardRow3Widget(height),
     );
   }
@@ -49,19 +51,19 @@ class _AddShipmentState extends State<AddShipmentPage> {
               InkWell(
                 onTap: from,
                 child: getCard('images/from.png', 'From',
-                    '${fromAddress?.fullName}', direction),
+                    fromAddress == null ? '':'${fromAddress?.fullName}', direction),
               ),
               const SizedBox(height: 24),
               InkWell(
                 onTap: to,
                 child: getCard(
-                    'images/to.png', 'To', '${toAddress?.fullName}', direction),
+                    'images/to.png', 'To', toAddress == null ? '':'${toAddress?.fullName}', direction),
               ),
               const SizedBox(height: 24),
               InkWell(
                 onTap: PackageDetails,
                 child: getCard('images/packagedetails.png', 'Package Details',
-                    'Package Details', direction),
+                    shipmentPackage == null ? '':'${shipmentPackage?.product?.name}' , direction),
               ),
               Padding(
                 padding:
@@ -73,7 +75,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
                         child: RoundElevatedButton(
                           child: getButtonText('submit'),
                           color: Colors.blueAccent,
-                          onPressed: () {},
+                          onPressed: _submit,
                           radius: 30,
                           minimumSizeFromHeight: 0,
                         ),
@@ -198,7 +200,30 @@ class _AddShipmentState extends State<AddShipmentPage> {
     }
   }
 
-  void PackageDetails() {
-    Navigator.pushNamed(context, '/list-package');
+  Future<void> PackageDetails() async {
+    final result =
+        await Navigator.pushNamed(context, '/list-package');
+
+    print('To list index =${result.toString()}');
+
+    try {
+      int index = int.parse(result!.toString());
+      setState(() {
+        shipmentPackage = AppSession.instance.packages[index];
+      });
+
+      print('shipmentPackage ${shipmentPackage?.product?.name}');
+    } catch (e) {
+      print('null result');
+    }
+
+
+  }
+
+  void _submit() async{
+    ShipmentRequest shipmentRequest = ShipmentRequest(shipmentPackage:shipmentPackage!,toAddress: toAddress!,fromAddress: fromAddress! );
+    print('toAddress=${shipmentRequest?.toJson()}');
+    await ShipmentApi().addShipment(shipmentRequest);
+    Navigator.pop(context);
   }
 }

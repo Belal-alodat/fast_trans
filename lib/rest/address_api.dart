@@ -16,7 +16,15 @@ class AddressApi extends SupplierAPI {
 class Village {
   int id = -1;
   String name = '';
+
   Village(this.name);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> jsonObject = new Map<String, dynamic>();
+    jsonObject["name"] = name;
+    jsonObject["id"] = id;
+    return jsonObject;
+  }
   Village.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     //print('id=$id');
@@ -29,6 +37,13 @@ class Town {
   String name = '';
   Town(this.name);
   Map<String, Village> villages = {};
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> jsonObject = new Map<String, dynamic>();
+    jsonObject["name"] = name;
+    jsonObject["id"] = id;
+    return jsonObject;
+  }
 
   Town.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -48,6 +63,14 @@ class City {
   String name = '';
   Map<String, Town> towns = {};
   City(this.name);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> jsonObject = new Map<String, dynamic>();
+    jsonObject["name"] = name;
+    jsonObject["id"] = id;
+    return jsonObject;
+  }
+
   City.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     // print('id=$id');
@@ -62,6 +85,7 @@ class City {
 }
 
 class Address {
+  final int id;
   final City city;
   final Town town;
   final Village village;
@@ -69,7 +93,14 @@ class Address {
   final int buildingNumber;
   final String mobile;
   final String fullName;
+  final bool favourite;
+  final double latitude;
+  final double longitude;
   Address({
+    this.id=-1,
+    this.longitude = 0.0,
+    this.latitude = 0.0,
+    this.favourite=false,
     required this.street,
     required this.buildingNumber,
     required this.mobile,
@@ -78,6 +109,25 @@ class Address {
     required this.town,
     required this.village,
   });
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> jsonObject = new Map<String, dynamic>();
+    jsonObject["id"] = id;
+    jsonObject["city"] = city.toJson();
+
+    jsonObject["town"] = town.toJson();
+    jsonObject["village"] = village.toJson();
+    jsonObject["mobile"] = mobile;
+    jsonObject["street"] = street;
+    jsonObject["buildingNumber"] = buildingNumber;
+
+    jsonObject["fullName"] = fullName;
+    jsonObject["latitude"] = latitude;
+    jsonObject["longitude"] = longitude;
+    jsonObject["favourite"] = favourite;
+
+    return jsonObject;
+  }
 }
 
 class AddressResponse {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum Direction { right, left }
 
-class CaredWithColoredEdge extends StatelessWidget {
+class CardWithColoredEdge extends StatelessWidget {
   final double height;
   final bool isRedEdge;
   final Color backGroundColor;
@@ -10,7 +10,7 @@ class CaredWithColoredEdge extends StatelessWidget {
   final Direction direction;
   final Widget child;
   List<Widget>? row3children;
-  CaredWithColoredEdge(
+  CardWithColoredEdge(
     this.height,
     this.backGroundColor,
     this.edgeColor,
