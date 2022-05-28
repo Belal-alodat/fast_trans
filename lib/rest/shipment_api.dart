@@ -13,7 +13,7 @@ class ShipmentApi extends SupplierAPI {
     print('on register');
     Map<String, dynamic> requestMap = request.toJson();
 
-    final response = await dioClient.post("/suppliers/shipments", data: requestMap);
+    final response = await dioClient.post("/shipments", data: requestMap);
   }
 }
 

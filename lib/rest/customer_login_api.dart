@@ -1,11 +1,12 @@
+import 'auth_api_base.dart';
 import 'supplier_api_base.dart';
 
-class CustomerLoginApi extends SupplierAPI {
+class CustomerLoginApi extends AuthAPI {
   Future<LoginResponse> login(LoginRequest request) async {
     //  print('on login');
     Map<String, dynamic> requestMap = request.toJson();
 
-    final response = await dioClient.post("/auth/login", data: requestMap);
+    final response = await dioClient.post("/login", data: requestMap);
     // print('response here');
     LoginResponse loginResponse = LoginResponse.fromJson(response);
     //  print('loginResponse${loginResponse.token}');

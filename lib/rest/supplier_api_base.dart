@@ -11,5 +11,5 @@ class SupplierAPI {
     HttpHeaders.authorizationHeader:'Bearer ${AppSession.instance.token}',
   });
 
-  static const String _baseUrl = 'http://192.168.100.39:1990';
+  static const String _baseUrl = 'http://192.168.100.39:1990/suppliers';
 }

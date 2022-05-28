@@ -2,6 +2,8 @@ import 'package:fast_trans/rest/address_api.dart';
 import 'package:flutter/material.dart';
 
 import '../core/app_session.dart';
+import '../util/dialogue.dart';
+import '../util/exception_handler.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 import '../widget/round_elevated_button.dart';
@@ -14,6 +16,7 @@ class AddressesPage extends StatefulWidget {
 
 class _AddressesState extends State<AddressesPage> {
   bool _isSaveing = false;
+  AddressApi addressApi = AddressApi();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController streetController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
@@ -44,7 +47,7 @@ class _AddressesState extends State<AddressesPage> {
         : Direction.right;
 
     return Scaffold(
-      appBar: AppBar(title: WidgetUtil.text('Create Address', color: Colors.white)),
+      appBar: AppBar(title: WidgetUtil.text('Create ${title} Address', color: Colors.white)),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -256,24 +259,40 @@ class _AddressesState extends State<AddressesPage> {
     String city = cityController.text;
     String town = townController.text;
     String village = villageController.text;
+    final title = ModalRoute.of(context)!.settings.arguments as String;
     // await Future.delayed(const Duration(seconds: 2));
-    Address address2 = Address(
+    Address address = Address(
         city: City(city),
         town: Town(town),
         village: Village(village),
         mobile: mobile,
         buildingNumber: int.parse(buildingNumber),
         fullName: name,
-        street: street);
+        street: street,
+    fromAddress: title == 'To' ? false:true,
+    favourite: true);
     print('pop ');
-    final title = ModalRoute.of(context)!.settings.arguments as String;
-    if (title == 'To') {
-      AppSession.instance.toAddresses.add(address2);
-    } else {
-      AppSession.instance.fromAddresses.add(address2);
-    }
 
-    Navigator.pop(context);
+
+    try{
+  await  addressApi.saveAddress(address);
+  if (title == 'To') {
+    AppSession.instance.toAddresses.insert(0, address);
+  } else {
+    AppSession.instance.fromAddresses.insert(0,address);
+  }
+  Navigator.pop(context);
+  } catch (error) {
+  var errorMessage = ExceptionHandler.handleException(error);
+  if (errorMessage == ExceptionHandler.KUnAuthorized) {
+    errorMessage = ExceptionHandler.kInvalidCredentials;
+  }
+  Dialogs.showErrorDialog(errorMessage, context);
+  setState(() {
+    _isSaveing = false;
+  });
+  }
+
   }
 
   void _reset() {

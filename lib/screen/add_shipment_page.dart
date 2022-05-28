@@ -222,7 +222,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
 
   void _submit() async{
     ShipmentRequest shipmentRequest = ShipmentRequest(shipmentPackage:shipmentPackage!,toAddress: toAddress!,fromAddress: fromAddress! );
-    print('toAddress=${shipmentRequest?.toJson()}');
+    print('toAddress=${shipmentRequest.toJson()}');
     await ShipmentApi().addShipment(shipmentRequest);
     Navigator.pop(context);
   }

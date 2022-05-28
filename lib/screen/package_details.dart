@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../core/app_session.dart';
 import '../rest/package_api.dart';
+import '../util/dialogue.dart';
+import '../util/exception_handler.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 import '../widget/round_elevated_button.dart';
@@ -23,7 +25,7 @@ class _PackageDetailsState extends State<PackageDetailsPage> {
   final TextEditingController dimensionController = TextEditingController();
   Map<String, Product> products = {};
   Map<String, Dimension> dimensions = {};
-
+  PackageAPI packageAPI =   PackageAPI();
   @override
   void didChangeDependencies() {
     print('didChangeDependencies');
@@ -158,22 +160,27 @@ class _PackageDetailsState extends State<PackageDetailsPage> {
     try{
       pieces = int.parse(piecesStr);
     }catch(e){}
-   // print('productStr= $productStr, dimensionStr=$dimensionStr');
 
-    //Dimension?  dimension= dimensions[dimensionStr];
-
-    //Product product=products[dimensionStr]!;
-
-    // await Future.delayed(const Duration(seconds: 2));
     ShipmentPackage package =  ShipmentPackage(dimension:dimensions[dimensionStr]!,product:products[productStr]!,weight: weight,id: -1,price: price,pieces: pieces  );
-   // print('dimensions = ${dimensions.length},name = ${dimension?.name}');
-   // dimensions.values.forEach((Dimension d) {print('values=${d.name}');});
-   // dimensions.keys.forEach((String d) {print('keys=${d}');});
-   // final title = ModalRoute.of(context)!.settings.arguments as String;
 
-    AppSession.instance.packages.add(package);
-    _isSaveing = false;
-    Navigator.pop(context);
+
+
+    try{
+      await  packageAPI.savePackage(package);
+      AppSession.instance.packages.insert(0,package);
+      Navigator.pop(context);
+    } catch (error) {
+      var errorMessage = ExceptionHandler.handleException(error);
+      if (errorMessage == ExceptionHandler.KUnAuthorized) {
+        errorMessage = ExceptionHandler.kInvalidCredentials;
+      }
+      Dialogs.showErrorDialog(errorMessage, context);
+      setState(() {
+        _isSaveing = false;
+      });
+    }
+
+
   }
 
   void _reset() {

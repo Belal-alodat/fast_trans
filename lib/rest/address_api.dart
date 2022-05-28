@@ -1,16 +1,13 @@
 import 'supplier_api_base.dart';
 
 class AddressApi extends SupplierAPI {
-  /*Future<LoginResponse> login(LoginRequest request) async {
+  Future<void> saveAddress(Address request) async {
     //  print('on login');
     Map<String, dynamic> requestMap = request.toJson();
+      await dioClient.post("/addresses", data: requestMap);
+    print('response here');
 
-    final response = await dioClient.post("/auth/login", data: requestMap);
-    // print('response here');
-    LoginResponse loginResponse = LoginResponse.fromJson(response);
-    //  print('loginResponse${loginResponse.token}');
-    return loginResponse;
-  }*/
+  }
 }
 
 class Village {
@@ -94,6 +91,7 @@ class Address {
   final String mobile;
   final String fullName;
   final bool favourite;
+  final bool fromAddress;
   final double latitude;
   final double longitude;
   Address({
@@ -101,6 +99,7 @@ class Address {
     this.longitude = 0.0,
     this.latitude = 0.0,
     this.favourite=false,
+    this.fromAddress=false,
     required this.street,
     required this.buildingNumber,
     required this.mobile,
@@ -125,6 +124,7 @@ class Address {
     jsonObject["latitude"] = latitude;
     jsonObject["longitude"] = longitude;
     jsonObject["favourite"] = favourite;
+    jsonObject["fromAddress"] = fromAddress;
 
     return jsonObject;
   }

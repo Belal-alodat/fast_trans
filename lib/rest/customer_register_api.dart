@@ -1,6 +1,7 @@
+import 'auth_api_base.dart';
 import 'supplier_api_base.dart';
 
-class RegisterApi extends SupplierAPI {
+class RegisterApi extends AuthAPI {
   Future<void> register2(RegisterRequest request) async {
     print('on register2sss');
   }
@@ -9,7 +10,7 @@ class RegisterApi extends SupplierAPI {
     print('on register');
     Map<String, dynamic> requestMap = request.toJson();
 
-    final response = await dioClient.post("/auth/register", data: requestMap);
+    final response = await dioClient.post("/register", data: requestMap);
   }
 }
 

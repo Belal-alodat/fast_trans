@@ -2,26 +2,16 @@ import '../models/shipment_package.dart';
 import 'supplier_api_base.dart';
 
 class PackageAPI extends SupplierAPI {
-  /*Future<LoginResponse> login(LoginRequest request) async {
+  Future<void> savePackage(ShipmentPackage request) async {
     //  print('on login');
     Map<String, dynamic> requestMap = request.toJson();
 
-    final response = await dioClient.post("/auth/login", data: requestMap);
+      await dioClient.post("/packages", data: requestMap);
     // print('response here');
-    LoginResponse loginResponse = LoginResponse.fromJson(response);
-    //  print('loginResponse${loginResponse.token}');
-    return loginResponse;
+
   }
 
-  private long id;
-	@OneToOne
-	private Product product;
-	@OneToOne
-	private Dimension dimension;
-	private double price;
-	private double weight;
-	private int pieces;
-  */
+
 }
 
 class ProductResponse {

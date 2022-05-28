@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 
-const _defaultConnectTimeout = 10000; //Duration.millisecondsPerMinute;
-const _defaultReceiveTimeout = 10000; //Duration.millisecondsPerMinute;
+const _defaultConnectTimeout = 1000000; //Duration.millisecondsPerMinute;
+const _defaultReceiveTimeout = 1000000; //Duration.millisecondsPerMinute;
 const kDebugMode = true;
 
 class DioClient {
