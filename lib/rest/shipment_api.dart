@@ -1,25 +1,23 @@
-import '../models/shipment_package.dart';
-import 'address_api.dart';
+import '../models/package.dart';
+import '../models/address.dart';
 import 'supplier_api_base.dart';
 
-
-
 class ShipmentApi extends SupplierAPI {
-  Future<void> register2(ShipmentRequest request) async {
-    print('on register2sss');
-  }
+
+  ShipmentApi(String token): super(token);
+
 
   Future<void> addShipment(ShipmentRequest request) async {
     print('on register');
     Map<String, dynamic> requestMap = request.toJson();
 
-    final response = await dioClient.post("/shipments", data: requestMap);
+    final response = await dioClient!.post("/shipments", data: requestMap);
   }
 }
 
 class ShipmentRequest {
 
-  final ShipmentPackage shipmentPackage;
+  final Package shipmentPackage;
   final String pickupDate;
   final String pickupTime;
   final Address fromAddress;

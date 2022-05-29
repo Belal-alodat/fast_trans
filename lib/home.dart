@@ -21,17 +21,15 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("AppSession.instance.isLogin=${AppSession.instance.isLogin}");
-    print("AppSession.instance.token=${AppSession.instance.token}");
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(
-          value: Auth(),
-        ),
-      ],
-      child: Consumer<Auth>(
-          builder: (ctx, auth, _) =>
-              AppSession.instance.isLogin ? MainPage() : const LoginPage()),
+
+    return  Consumer<Auth>(
+          builder: (ctx, auth, _) {
+            print("AppSession.instance.isLogin=${auth.isAuth }");
+            print("AppSession.instance.token=${auth.token}");
+            return auth.isAuth ? MainPage() : const LoginPage();
+          }
     );
+
+
   }
 }

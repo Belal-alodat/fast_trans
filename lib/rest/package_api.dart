@@ -1,16 +1,24 @@
-import '../models/shipment_package.dart';
+import '../models/package.dart';
 import 'supplier_api_base.dart';
 
 class PackageAPI extends SupplierAPI {
-  Future<void> savePackage(ShipmentPackage request) async {
+
+  PackageAPI(String token): super(token);
+
+  Future<void> savePackage(Package request) async {
     //  print('on login');
     Map<String, dynamic> requestMap = request.toJson();
 
-      await dioClient.post("/packages", data: requestMap);
+      await dioClient!.post("/packages", data: requestMap);
     // print('response here');
 
   }
 
+  Future<PackageResponse> getPackages() async {
+    final response = await dioClient!.get("/packages");
+    PackageResponse addressResponse = await PackageResponse.fromJson(response);
+    return addressResponse;
+  }
 
 }
 
@@ -23,7 +31,7 @@ class ProductResponse {
     return products.keys.map((e) => e).toList();
   }
 
-  ProductResponse.fromJson(List<Map<String, dynamic>> json) {
+  ProductResponse.fromJson(List<dynamic> json) {
     for (Map<String, dynamic> product in json) {
       String productName = product['name'];
       print('productName=$productName');
@@ -43,7 +51,7 @@ class DimensionResponse {
     return dimensions.keys.map((e) => e).toList();
   }
 
-  DimensionResponse.fromJson(List<Map<String, dynamic>> json) {
+  DimensionResponse.fromJson(List< dynamic> json) {
     for (Map<String, dynamic> dimension in json) {
       String dimensionName = dimension['name'];
         print('dimensionName=$dimensionName');

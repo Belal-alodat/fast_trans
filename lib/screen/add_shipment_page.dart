@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/app_session.dart';
-import '../models/shipment_package.dart';
+import '../models/address.dart';
+import '../models/package.dart';
 import '../providers/Auth.dart';
+import '../providers/shipment_provider.dart';
+import '../rest/address_api.dart';
+import '../rest/package_api.dart';
 import '../rest/shipment_api.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
@@ -16,9 +20,10 @@ class AddShipmentPage extends StatefulWidget {
 }
 
 class _AddShipmentState extends State<AddShipmentPage> {
+
   Address? toAddress;
   Address? fromAddress;
-  ShipmentPackage? shipmentPackage;
+  Package? shipmentPackage;
   Widget getCard(
       String image, String label, String ObjectString, Direction direction) {
     double height = 50.0;
@@ -41,58 +46,60 @@ class _AddShipmentState extends State<AddShipmentPage> {
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const SizedBox(height: 24),
-              InkWell(
-                onTap: from,
-                child: getCard('images/from.png', 'From',
-                    fromAddress == null ? '':'${fromAddress?.fullName}', direction),
-              ),
-              const SizedBox(height: 24),
-              InkWell(
-                onTap: to,
-                child: getCard(
-                    'images/to.png', 'To', toAddress == null ? '':'${toAddress?.fullName}', direction),
-              ),
-              const SizedBox(height: 24),
-              InkWell(
-                onTap: PackageDetails,
-                child: getCard('images/packagedetails.png', 'Package Details',
-                    shipmentPackage == null ? '':'${shipmentPackage?.product?.name}' , direction),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: RoundElevatedButton(
-                          child: getButtonText('submit'),
-                          color: Colors.blueAccent,
-                          onPressed: _submit,
-                          radius: 30,
-                          minimumSizeFromHeight: 0,
+        child: Consumer<ShipmentProvider>(
+          builder: (ctx, shipmentProvider, _) => SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(height: 24),
+                InkWell(
+                  onTap: from,
+                  child: getCard('images/from.png', 'From',
+                      fromAddress == null ? '':'${fromAddress?.fullName}', direction),
+                ),
+                const SizedBox(height: 24),
+                InkWell(
+                  onTap: to,
+                  child: getCard(
+                      'images/to.png', 'To', toAddress == null ? '':'${toAddress?.fullName}', direction),
+                ),
+                const SizedBox(height: 24),
+                InkWell(
+                  onTap: PackageDetails,
+                  child: getCard('images/packagedetails.png', 'Package Details',
+                      shipmentPackage == null ? '':'${shipmentPackage?.product?.name}' , direction),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: RoundElevatedButton(
+                            child: getButtonText('submit'),
+                            color: Colors.blueAccent,
+                            onPressed: _submit,
+                            radius: 30,
+                            minimumSizeFromHeight: 0,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 24),
-                      Expanded(
-                        child: RoundElevatedButton(
-                          child: getButtonText('reset'),
-                          color: Colors.blueAccent,
-                          onPressed: () {},
-                          radius: 30,
-                          minimumSizeFromHeight: 0,
+                        const SizedBox(width: 24),
+                        Expanded(
+                          child: RoundElevatedButton(
+                            child: getButtonText('reset'),
+                            color: Colors.blueAccent,
+                            onPressed: () {},
+                            radius: 30,
+                            minimumSizeFromHeight: 0,
+                          ),
                         ),
-                      ),
-                    ]),
-              ),
-            ],
+                      ]),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -168,6 +175,10 @@ class _AddShipmentState extends State<AddShipmentPage> {
   }
 
   void from() async {
+
+    AddressResponse addressResponse = await addressApi.getFromAddress();
+    AppSession.instance.fromAddresses = addressResponse.addresses;
+
     final result = await Navigator.pushNamed(context, '/list-addresses',
         arguments: 'From');
     print('From list index =${result.toString()}');
@@ -183,8 +194,13 @@ class _AddShipmentState extends State<AddShipmentPage> {
       print('null result');
     }
   }
-
+  AddressApi  addressApi = AddressApi(AppSession.instance.token);
+  PackageAPI packageAPI = PackageAPI(AppSession.instance.token);
   void to() async {
+
+    AddressResponse addressResponse = await addressApi.getToAddress();
+
+    AppSession.instance.toAddresses = addressResponse.addresses;
     final result =
         await Navigator.pushNamed(context, '/list-addresses', arguments: 'To');
     print('To list index =${result.toString()}');
@@ -201,6 +217,10 @@ class _AddShipmentState extends State<AddShipmentPage> {
   }
 
   Future<void> PackageDetails() async {
+
+    PackageResponse packageResponse = await packageAPI.getPackages();
+    AppSession.instance.packages = packageResponse.packages;
+
     final result =
         await Navigator.pushNamed(context, '/list-package');
 
@@ -221,9 +241,11 @@ class _AddShipmentState extends State<AddShipmentPage> {
   }
 
   void _submit() async{
-    ShipmentRequest shipmentRequest = ShipmentRequest(shipmentPackage:shipmentPackage!,toAddress: toAddress!,fromAddress: fromAddress! );
-    print('toAddress=${shipmentRequest.toJson()}');
-    await ShipmentApi().addShipment(shipmentRequest);
+    ShipmentRequest shipmentRequest = ShipmentRequest(
+        shipmentPackage: shipmentPackage!,
+        toAddress: toAddress!,
+        fromAddress: fromAddress!);
+    await Provider.of<ShipmentProvider>(context, listen: false).saveShipment(shipmentRequest);
     Navigator.pop(context);
   }
 }

@@ -34,7 +34,7 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = 't@com';
+    nameController.text = 't1@com';
     passwordController.text = '123123';
     return SafeArea(
       child: Scaffold(
@@ -148,7 +148,9 @@ class LoginPageState extends State<LoginPage> {
       // Provider.of<Auth>(context, listen: false).
       await Provider.of<Auth>(context, listen: false).login(username, password);
     } catch (error) {
+
       var errorMessage = ExceptionHandler.handleException(error);
+      print("errorMessage= $errorMessage error=$error");
       if (errorMessage == ExceptionHandler.KUnAuthorized) {
         errorMessage = ExceptionHandler.kInvalidCredentials;
       }

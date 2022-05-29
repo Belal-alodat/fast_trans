@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/app_session.dart';
+import '../models/address.dart';
 import '../rest/address_api.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
@@ -12,7 +13,9 @@ class ListAddressesPage extends StatefulWidget {
 }
 
 class _ListAddressesState extends State<ListAddressesPage> {
-  int _counter = 0;
+
+  ScrollController _scrollController = ScrollController();
+
   Widget build(BuildContext context) {
     List<Address> addresses = AppSession.instance.fromAddresses;
     final title = ModalRoute.of(context)!.settings.arguments as String;
@@ -38,6 +41,10 @@ class _ListAddressesState extends State<ListAddressesPage> {
           //AppSession.instance.addresses.add(address2);
           setState(() {
             print('setState ');
+            _scrollController.animateTo(
+                _scrollController.position.minScrollExtent,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.ease);
           });
         },
         tooltip: 'Create Address',
@@ -48,6 +55,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
+          controller: _scrollController,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -127,9 +135,31 @@ class _ListAddressesState extends State<ListAddressesPage> {
 
   Widget getWidget10(Address address, Color backgroundColor) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+      padding: const EdgeInsets.fromLTRB(15, 0, 15, 5),
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+               Container(
+                 padding: const EdgeInsets.fromLTRB(0, 0, 15, 15),
+                  height: 30,
+                  width: 30,
+                  alignment: Alignment.center,
+                  // padding: const EdgeInsets.fromLTRB(0, 0, 15, 25),
+                  //    color: Colors.black,
+
+                  child: Icon(
+                    Icons.favorite,
+                    color: address.favourite ? Colors.red :Colors.white70,
+                    //size: 30,
+
+                  ),
+                  //  color: Colors.black,
+                ),
+
+            ],
+          ),
           Row(
             children: [
               Container(
@@ -146,7 +176,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
                   //  color: Colors.red,
                   child: Text(
                     textAlign: TextAlign.center,
-                    address.fullName,
+                    address.fullName ?? '',
                     overflow: TextOverflow.ellipsis,
                     style:
                         TextStyle(color: backgroundColor, fontFamily: 'loewm'),
@@ -172,7 +202,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
                   //  color: Colors.red,
                   child: Text(
                     textAlign: TextAlign.center,
-                    '${address.city.name}-${address.town.name}-${address.village.name}',
+                    '${address.city?.name}-${address.town?.name}-${address.village?.name}',
                     overflow: TextOverflow.ellipsis,
                     style:
                         TextStyle(color: backgroundColor, fontFamily: 'loewm'),
@@ -199,7 +229,7 @@ class _ListAddressesState extends State<ListAddressesPage> {
                   //  color: Colors.red,
                   child: Text(
                     textAlign: TextAlign.center,
-                    address.mobile,
+                    address.mobile??'',
                     overflow: TextOverflow.ellipsis,
                     style:
                         TextStyle(color: backgroundColor, fontFamily: 'loewm'),

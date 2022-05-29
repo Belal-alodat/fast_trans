@@ -2,6 +2,7 @@ import 'package:fast_trans/rest/address_api.dart';
 import 'package:flutter/material.dart';
 
 import '../core/app_session.dart';
+import '../models/address.dart';
 import '../util/dialogue.dart';
 import '../util/exception_handler.dart';
 import '../util/widget_util.dart';
@@ -16,7 +17,7 @@ class AddressesPage extends StatefulWidget {
 
 class _AddressesState extends State<AddressesPage> {
   bool _isSaveing = false;
-  AddressApi addressApi = AddressApi();
+  AddressApi addressApi = AddressApi(AppSession.instance.token);
   final TextEditingController nameController = TextEditingController();
   final TextEditingController streetController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
@@ -25,21 +26,25 @@ class _AddressesState extends State<AddressesPage> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController villageController = TextEditingController();
   final TextEditingController townController = TextEditingController();
-  Map<String, City> cities = {};
+  bool _isFav = false;
+
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     print('didChangeDependencies');
-    cities = AppSession.instance.getcities();
+    //cities = await AppSession.instance.getcities();
 
     //  print("length=${cities.length}");
     /* cities.keys.forEach((element) {
       print("element=${element}");
     });*/
-    citiesList = cities.keys.map((e) => e).toList();
+    //citiesList = cities.keys.map((e) => e).toList();
   }
-
+  Map<String, City> cities = {};
   List<String> citiesList = [];
+
   Widget build(BuildContext context) {
+    cities = AppSession.instance.cities;
+    citiesList = AppSession.instance.citiesList;
     final title = ModalRoute.of(context)!.settings.arguments as String;
     double height = 150.0;
     Direction direction = AppSession.instance.languageCode == 'ar'
@@ -140,10 +145,38 @@ class _AddressesState extends State<AddressesPage> {
   String gender = "Male";
   Widget getWidget10() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+      padding: const EdgeInsets.fromLTRB(15, 0, 15, 5),
       child: Column(
         children: [
           //  _buildTextField('Full Name', nameController),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              InkWell(
+                onTap: () {
+                  print('isFav=$_isFav');
+                  setState(() {
+                    _isFav = !_isFav;
+                  });
+                },
+                child: Container(
+                  height: 30,
+                  width: 30,
+                  alignment: Alignment.center,
+                  // padding: const EdgeInsets.fromLTRB(0, 0, 15, 25),
+                  //    color: Colors.black,
+
+                  child: Icon(
+                    Icons.favorite,
+                    color: _isFav ? Colors.red :Colors.white70,
+                    //size: 30,
+
+                  ),
+                  //  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
           _buildTextField('Full Name', nameController),
           _buildTextField('mobile', mobileController),
           _buildTextField('street', streetController),
@@ -270,16 +303,17 @@ class _AddressesState extends State<AddressesPage> {
         fullName: name,
         street: street,
     fromAddress: title == 'To' ? false:true,
-    favourite: true);
+    favourite:_isFav );
     print('pop ');
 
 
     try{
-  await  addressApi.saveAddress(address);
+      if(_isFav) await  addressApi.saveAddress(address);
   if (title == 'To') {
     AppSession.instance.toAddresses.insert(0, address);
+
   } else {
-    AppSession.instance.fromAddresses.insert(0,address);
+    AppSession.instance.fromAddresses.insert(0, address);
   }
   Navigator.pop(context);
   } catch (error) {

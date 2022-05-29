@@ -3,32 +3,29 @@ import 'dart:math';
 import 'package:fast_trans/rest/package_api.dart';
 import 'package:flutter/widgets.dart';
 
-import '../models/shipment_package.dart';
+import '../models/address.dart';
+import '../models/package.dart';
 import '../models/user_credentails.dart';
 import '../rest/address_api.dart';
+import '../rest/lookups_api.dart';
 
 class AppSession {
   AppSession._privateConstructor();
+
+  //Map<String, Address> towns = {};
+
   List<Address> fromAddresses = [];
   List<Address> toAddresses = [];
-  List<ShipmentPackage> packages = [];
+  List<Package> packages = [];
+  LookupAPI lookupAPI  = LookupAPI();
+  Map<String, City> cities = {};
+  List<String> citiesList = [];
 
-  Map<String, City> getcities() {
-    AddressResponse addressResponse = AddressResponse.fromJson(addressesAsJson);
-    Map<String, City> cities = addressResponse.cities;
+  List<String> productList = [];
+  List<String> dimensionList = [];
 
-    return cities;
-  }
-  Map<String, Product> getProducts() {
-    ProductResponse productResponse = ProductResponse.fromJson(productsAsJson);
-    Map<String, Product> products = productResponse.products;
-    return products;
-  }
-  Map<String, Dimension> getDimensions() {
-    DimensionResponse productResponse = DimensionResponse.fromJson(dimensionsAsJson);
-    Map<String, Dimension> dimensions = productResponse.dimensions;
-    return dimensions;
-  }
+  Map<String, Dimension> dimensions = {};
+  Map<String, Product> products ={};
   Credential get credential => _credential;
 
   set credential(Credential credential) => _credential = credential;

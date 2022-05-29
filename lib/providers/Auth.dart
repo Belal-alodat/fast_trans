@@ -5,22 +5,28 @@ import 'package:flutter/widgets.dart';
 import '../core/app_session.dart';
 import '../rest/customer_login_api.dart';
 import '../rest/customer_register_api.dart';
+import '../rest/lookups_api.dart';
 
 class Auth with ChangeNotifier {
   Auth() {}
   bool _isAuth = false;
-
-  get isAuth => AppSession.instance.isLogin;
+  String _token = '';
+  String get token => _token;
+  get isAuth => _isAuth;
 
   logout() {
     AppSession.instance.isLogin = false;
     AppSession.instance.token = "";
+    AppSession.instance.fromAddresses = [];
+    AppSession.instance.toAddresses = [];
+    AppSession.instance.packages = [];
     notifyListeners();
   }
 
   Future<void> login(String username, String password) {
     print('login');
     //  AppSession.instance.credential = Credential(username, password);
+
     return _authenticate(username, password);
     //print('Utility '+Utility.getNoOnce());
   }
@@ -36,6 +42,21 @@ class Auth with ChangeNotifier {
     LoginRequest customerLoginRequest;
     LoginResponse customerLoginResponse;
 
+    LookupAPI lookupAPI = LookupAPI();
+    var addressLockupResponse = await lookupAPI.getAddressLookups();
+    AppSession.instance.cities = addressLockupResponse.cities;
+    AppSession.instance.citiesList= AppSession.instance.cities.keys.map((e) => e).toList();
+
+    var dimensionsLookup = await lookupAPI.getDimensionsLookups();
+    AppSession.instance.dimensions = dimensionsLookup.dimensions;
+    AppSession.instance.dimensionList=  AppSession.instance.dimensions.keys.map((e) => e).toList();
+
+    var productResponse = await lookupAPI.getProducts();
+    AppSession.instance.products = productResponse.products;
+    AppSession.instance.productList = productResponse.products.keys.map((e) => e).toList();
+    //cities = await AppSession.instance.getcities();
+    //citiesList = cities.keys.map((e) => e).toList();
+
     String lang_code = AppSession.instance.languageCode;
     customerLoginRequest = LoginRequest(
         userName: username, password: password, lang_code: lang_code);
@@ -44,8 +65,11 @@ class Auth with ChangeNotifier {
 
     AppSession.instance.isLogin = true;
     AppSession.instance.token = customerLoginResponse.token;
+    _isAuth = true;
+    _token = customerLoginResponse.token;
 
     notifyListeners();
+
   }
 
   Future<void> register(

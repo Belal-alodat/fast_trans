@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/app_session.dart';
-import '../models/shipment_package.dart';
+import '../models/package.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 
@@ -12,10 +12,12 @@ class ListPackagesPage extends StatefulWidget {
 }
 
 class _ListPackagesState extends State<ListPackagesPage> {
-  int _counter = 0;
+
+  ScrollController _scrollController = ScrollController();
+
   Widget build(BuildContext context) {
     String title = 'packages';
-    List<ShipmentPackage> packages = AppSession.instance.packages;
+    List<Package> packages = AppSession.instance.packages;
 
     print('_ListAddressesState build ');
     double height = 150.0;
@@ -30,6 +32,10 @@ class _ListPackagesState extends State<ListPackagesPage> {
           await Navigator.pushNamed(context, '/package', arguments: title);
           setState(() {
             print('setState ');
+            _scrollController.animateTo(
+                _scrollController.position.minScrollExtent,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.ease);
           });
         },
         tooltip: 'Create Package',
@@ -40,6 +46,7 @@ class _ListPackagesState extends State<ListPackagesPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
+          controller: _scrollController,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -52,7 +59,7 @@ class _ListPackagesState extends State<ListPackagesPage> {
   }
 
   List<Widget> getChildren(
-      List<ShipmentPackage> packages, double height, Direction direction) {
+      List<Package> packages, double height, Direction direction) {
     List<Widget> children = [];
     for (int i = 0; i < packages.length; i++) {
       children.add(const SizedBox(height: 10));
@@ -117,11 +124,33 @@ class _ListPackagesState extends State<ListPackagesPage> {
     ];
   }
 
-  Widget getWidget10(ShipmentPackage shipmentPackage, Color backgroundColor) {
+  Widget getWidget10(Package shipmentPackage, Color backgroundColor) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+      padding: const EdgeInsets.fromLTRB(15, 15, 0, 5),
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.fromLTRB(0, 0, 15, 15),
+                height: 30,
+                width: 30,
+                alignment: Alignment.center,
+                // padding: const EdgeInsets.fromLTRB(0, 0, 15, 25),
+                //    color: Colors.black,
+
+                child: Icon(
+                  Icons.favorite,
+                  color: shipmentPackage.favourite ? Colors.red :Colors.white70,
+                  //size: 30,
+
+                ),
+                //  color: Colors.black,
+              ),
+
+            ],
+          ),
           Row(
             children: [
               Container(
@@ -138,7 +167,7 @@ class _ListPackagesState extends State<ListPackagesPage> {
                   //  color: Colors.red,
                   child: Text(
                     textAlign: TextAlign.center,
-                    shipmentPackage.product.name,
+                    shipmentPackage.product?.name ?? '',
                     overflow: TextOverflow.ellipsis,
                     style:
                         TextStyle(color: backgroundColor, fontFamily: 'loewm'),
@@ -191,7 +220,7 @@ class _ListPackagesState extends State<ListPackagesPage> {
                   //  color: Colors.red,
                   child: Text(
                     textAlign: TextAlign.center,
-                    shipmentPackage.dimension.name,
+                    shipmentPackage.dimension?.name ?? '',
                     overflow: TextOverflow.ellipsis,
                     style:
                         TextStyle(color: backgroundColor, fontFamily: 'loewm'),
