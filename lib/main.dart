@@ -45,8 +45,8 @@ class MyApp extends StatelessWidget {
           value: AddressProvider(),
         ),
         ChangeNotifierProxyProvider<Auth, ShipmentProvider>(
-          create: (BuildContext context) => ShipmentProvider(Provider.of<Auth>(context, listen: false)),
-          update: (_, auth, __) => ShipmentProvider(auth),
+          create: (BuildContext context) => ShipmentProvider(Provider.of<Auth>(context, listen: false).token),
+          update: (_, auth, __) => ShipmentProvider(auth.token),
         ),
 
 

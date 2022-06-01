@@ -6,12 +6,8 @@ class PackageAPI extends SupplierAPI {
   PackageAPI(String token): super(token);
 
   Future<void> savePackage(Package request) async {
-    //  print('on login');
     Map<String, dynamic> requestMap = request.toJson();
-
       await dioClient!.post("/packages", data: requestMap);
-    // print('response here');
-
   }
 
   Future<PackageResponse> getPackages() async {

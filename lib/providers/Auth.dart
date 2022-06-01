@@ -1,8 +1,10 @@
 import 'dart:core';
 
+
 import 'package:flutter/widgets.dart';
 
-import '../core/app_session.dart';
+import '../models/address.dart';
+import '../models/package.dart';
 import '../rest/customer_login_api.dart';
 import '../rest/customer_register_api.dart';
 import '../rest/lookups_api.dart';
@@ -15,11 +17,13 @@ class Auth with ChangeNotifier {
   get isAuth => _isAuth;
 
   logout() {
-    AppSession.instance.isLogin = false;
-    AppSession.instance.token = "";
-    AppSession.instance.fromAddresses = [];
-    AppSession.instance.toAddresses = [];
-    AppSession.instance.packages = [];
+    _isAuth = false;
+    _token ="";
+    //AppSession.instance.isLogin = false;
+   // AppSession.instance.token = "";
+    //AppSession.instance.fromAddresses = [];
+   // AppSession.instance.toAddresses = [];
+   // AppSession.instance.packages = [];
     notifyListeners();
   }
 
@@ -37,6 +41,17 @@ class Auth with ChangeNotifier {
     AppSession.instance.isLogin = true;
     notifyListeners();
   }*/
+
+  //LookupAPI lookupAPI  = LookupAPI();
+
+  Map<String, City> cities = {};
+  List<String> citiesList = [];
+
+  List<String> productList = [];
+  List<String> dimensionList = [];
+  Map<String, Dimension> dimensions = {};
+  Map<String, Product> products ={};
+
   Future<void> _authenticate(String username, String password) async {
     CustomerLoginApi customerLoginApi = CustomerLoginApi();
     LoginRequest customerLoginRequest;
@@ -44,27 +59,27 @@ class Auth with ChangeNotifier {
 
     LookupAPI lookupAPI = LookupAPI();
     var addressLockupResponse = await lookupAPI.getAddressLookups();
-    AppSession.instance.cities = addressLockupResponse.cities;
-    AppSession.instance.citiesList= AppSession.instance.cities.keys.map((e) => e).toList();
+     cities = addressLockupResponse.cities;
+     citiesList= cities.keys.map((e) => e).toList();
 
     var dimensionsLookup = await lookupAPI.getDimensionsLookups();
-    AppSession.instance.dimensions = dimensionsLookup.dimensions;
-    AppSession.instance.dimensionList=  AppSession.instance.dimensions.keys.map((e) => e).toList();
+    dimensions = dimensionsLookup.dimensions;
+     dimensionList=   dimensions.keys.map((e) => e).toList();
 
     var productResponse = await lookupAPI.getProducts();
-    AppSession.instance.products = productResponse.products;
-    AppSession.instance.productList = productResponse.products.keys.map((e) => e).toList();
+     products = productResponse.products;
+     productList = productResponse.products.keys.map((e) => e).toList();
     //cities = await AppSession.instance.getcities();
     //citiesList = cities.keys.map((e) => e).toList();
 
-    String lang_code = AppSession.instance.languageCode;
+
     customerLoginRequest = LoginRequest(
-        userName: username, password: password, lang_code: lang_code);
+        userName: username, password: password);
 
     customerLoginResponse = await customerLoginApi.login(customerLoginRequest);
 
-    AppSession.instance.isLogin = true;
-    AppSession.instance.token = customerLoginResponse.token;
+   // AppSession.instance.isLogin = true;
+    //AppSession.instance.token = customerLoginResponse.token;
     _isAuth = true;
     _token = customerLoginResponse.token;
 

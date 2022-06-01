@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 
-import '../core/app_session.dart';
 import '../services/dio_client.dart';
 
 class AuthAPI {

@@ -6,13 +6,13 @@ import '../models/package.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 
-class ListPackagesPage extends StatefulWidget {
-  const ListPackagesPage();
+class PickupShipmentsPage extends StatefulWidget {
+  const PickupShipmentsPage();
   @override
-  _ListPackagesState createState() => _ListPackagesState();
+  _PickupShipmentsPageState createState() => _PickupShipmentsPageState();
 }
 
-class _ListPackagesState extends State<ListPackagesPage> {
+class _PickupShipmentsPageState extends State<PickupShipmentsPage> {
 
 
 

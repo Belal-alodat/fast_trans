@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../core/app_session.dart';
 import '../providers/Auth.dart';
 import '../util/dialogue.dart';
 import '../util/exception_handler.dart';
@@ -34,7 +33,7 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = 't1@com';
+    nameController.text = 't3@com';
     passwordController.text = '123123';
     return SafeArea(
       child: Scaffold(
@@ -52,13 +51,9 @@ class LoginPageState extends State<LoginPage> {
                     InkWell(
                       child: text(tr('language')),
                       onTap: () {
-                        AppSession.instance.languageCode == 'en'
+                        context.locale.languageCode == 'en'
                             ? context.setLocale(Locale('ar'))
                             : context.setLocale(Locale('en'));
-                        AppSession.instance.languageCode =
-                            AppSession.instance.languageCode == 'ar'
-                                ? 'en'
-                                : 'ar';
                       },
                     ),
                   ]),

@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../core/app_session.dart';
 import '../providers/Auth.dart';
 import '../widget/ItemsMenueCards.dart';
 
@@ -31,7 +29,8 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget build(BuildContext context) {
-    var lang = AppSession.instance.languageCode == 'ar' ? 'ar' : '';
+    //var lang = AppSession.instance.languageCode == 'ar' ? 'ar' : '';
+    var lang =  context.locale.languageCode == 'ar' ? 'ar' : '';
     var textScaleFactor = MediaQuery.of(context).textScaleFactor;
     // nameController.text = 'modat123';
     // passwordController.text = 'Az123456789';
@@ -62,13 +61,11 @@ class _MainPageState extends State<MainPage> {
                     InkWell(
                       child: text(tr('language')),
                       onTap: () {
-                        AppSession.instance.languageCode == 'en'
+                      // print( context.locale.languageCode);
+                       context.locale.languageCode == 'en'
                             ? context.setLocale(Locale('ar'))
                             : context.setLocale(Locale('en'));
-                        AppSession.instance.languageCode =
-                            AppSession.instance.languageCode == 'ar'
-                                ? 'en'
-                                : 'ar';
+
                       },
                     ),
                     InkWell(
@@ -121,5 +118,6 @@ class _MainPageState extends State<MainPage> {
 
   logout() async {
     await Provider.of<Auth>(context, listen: false).logout();
+    print('main page logout');
   }
 }

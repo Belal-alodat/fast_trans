@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'core/app_session.dart';
 import 'providers/Auth.dart';
 import 'screen/register_page.dart';
 
@@ -20,8 +19,8 @@ class RegisterScreenState extends State<RegisterHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("AppSession.instance.isLogin=${AppSession.instance.isLogin}");
-    print("AppSession.instance.token=${AppSession.instance.token}");
+  //  print("AppSession.instance.isLogin=${AppSession.instance.isLogin}");
+  //  print("AppSession.instance.token=${AppSession.instance.token}");
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(

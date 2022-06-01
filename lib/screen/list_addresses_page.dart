@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../core/app_session.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:provider/provider.dart';
 import '../models/address.dart';
-import '../rest/address_api.dart';
+import '../providers/shipment_provider.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 
@@ -17,20 +17,23 @@ class _ListAddressesState extends State<ListAddressesPage> {
   ScrollController _scrollController = ScrollController();
 
   Widget build(BuildContext context) {
-    List<Address> addresses = AppSession.instance.fromAddresses;
+    Direction direction = context.locale.languageCode == 'ar'
+        ? Direction.left
+        : Direction.right;
+
+
+    List<Address> addresses =  Provider.of<ShipmentProvider>(context, listen: false).fromAddresses;
     final title = ModalRoute.of(context)!.settings.arguments as String;
     if (title == 'To') {
       print('toAddresses');
-      addresses = AppSession.instance.toAddresses;
+      addresses =  Provider.of<ShipmentProvider>(context, listen: false).toAddresses;
     } else {
       print('fromAddresses');
     }
 
     print('_ListAddressesState build ');
     double height = 150.0;
-    Direction direction = AppSession.instance.languageCode == 'ar'
-        ? Direction.left
-        : Direction.right;
+
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(

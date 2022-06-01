@@ -1,12 +1,12 @@
 import 'package:fast_trans/rest/address_api.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
-
-import '../core/app_session.dart';
+import '../providers/shipment_provider.dart';
 import '../models/address.dart';
 import '../models/package.dart';
 import '../providers/Auth.dart';
-import '../providers/shipment_provider.dart';
+
 import '../rest/address_api.dart';
 import '../rest/package_api.dart';
 import '../rest/shipment_api.dart';
@@ -39,15 +39,17 @@ class _AddShipmentState extends State<AddShipmentPage> {
   }
 
   Widget build(BuildContext context) {
-    Direction direction = AppSession.instance.languageCode == 'ar'
+   // var lang =  context.locale.languageCode == 'ar' ? 'ar' : '';
+  print('context.locale.languageCode = ${context.locale.languageCode }');
+    Direction direction = context.locale.languageCode == 'ar'
         ? Direction.left
         : Direction.right;
 
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
-        child: Consumer<ShipmentProvider>(
-          builder: (ctx, shipmentProvider, _) => SingleChildScrollView(
+        child: /*Consumer<ShipmentProvider>(
+          builder: (ctx, shipmentProvider, _) =>*/ SingleChildScrollView(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -101,7 +103,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
               ],
             ),
           ),
-        ),
+     //   ),
       ),
     );
   }
@@ -176,8 +178,9 @@ class _AddShipmentState extends State<AddShipmentPage> {
 
   void from() async {
 
-    AddressResponse addressResponse = await addressApi.getFromAddress();
-    AppSession.instance.fromAddresses = addressResponse.addresses;
+  //  AddressResponse addressResponse = await addressApi.getFromAddress();
+   // AppSession.instance.fromAddresses = addressResponse.addresses;
+    await Provider.of<ShipmentProvider>(context, listen: false).getFromAddress();
 
     final result = await Navigator.pushNamed(context, '/list-addresses',
         arguments: 'From');
@@ -187,27 +190,29 @@ class _AddShipmentState extends State<AddShipmentPage> {
       int index = int.parse(result!.toString());
 
       setState(() {
-        fromAddress = AppSession.instance.fromAddresses[index];
+        fromAddress =  Provider.of<ShipmentProvider>(context, listen: false).fromAddresses[index];
       });
       print('fromAddress ${fromAddress?.fullName}');
     } catch (e) {
       print('null result');
     }
   }
-  AddressApi  addressApi = AddressApi(AppSession.instance.token);
-  PackageAPI packageAPI = PackageAPI(AppSession.instance.token);
+  //AddressApi  addressApi = AddressApi(AppSession.instance.token);
+ // PackageAPI packageAPI = PackageAPI(AppSession.instance.token);
   void to() async {
 
-    AddressResponse addressResponse = await addressApi.getToAddress();
+    await Provider.of<ShipmentProvider>(context, listen: false).getToAddress();
 
-    AppSession.instance.toAddresses = addressResponse.addresses;
+    //AddressResponse addressResponse = await addressApi.getToAddress();
+
+    //AppSession.instance.toAddresses = addressResponse.addresses;
     final result =
         await Navigator.pushNamed(context, '/list-addresses', arguments: 'To');
     print('To list index =${result.toString()}');
     try {
       int index = int.parse(result!.toString());
       setState(() {
-        toAddress = AppSession.instance.toAddresses[index];
+        toAddress = Provider.of<ShipmentProvider>(context, listen: false).toAddresses[index];
       });
 
       print('toAddress ${toAddress?.fullName}');
@@ -218,9 +223,9 @@ class _AddShipmentState extends State<AddShipmentPage> {
 
   Future<void> PackageDetails() async {
 
-    PackageResponse packageResponse = await packageAPI.getPackages();
-    AppSession.instance.packages = packageResponse.packages;
-
+    //PackageResponse packageResponse = await packageAPI.getPackages();
+    //AppSession.instance.packages = packageResponse.packages;
+    await Provider.of<ShipmentProvider>(context, listen: false).getPackages();
     final result =
         await Navigator.pushNamed(context, '/list-package');
 
@@ -229,7 +234,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
     try {
       int index = int.parse(result!.toString());
       setState(() {
-        shipmentPackage = AppSession.instance.packages[index];
+        shipmentPackage = Provider.of<ShipmentProvider>(context, listen: false).packages[index];
       });
 
       print('shipmentPackage ${shipmentPackage?.product?.name}');

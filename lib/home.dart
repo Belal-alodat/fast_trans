@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'core/app_session.dart';
 import 'providers/Auth.dart';
 import 'screen/login_screen.dart';
 import 'screen/main_page.dart';

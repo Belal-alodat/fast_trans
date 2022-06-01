@@ -29,12 +29,12 @@ class LoginResponse {
 class LoginRequest {
   final String userName;
   final String password;
-  final String lang_code;
+
 
   LoginRequest(
       {required this.userName,
       required this.password,
-      required this.lang_code});
+     });
 
   Map<String, dynamic> toJson() {
     print('on toJson');
@@ -42,7 +42,6 @@ class LoginRequest {
 
     jsonObject["email"] = this.userName;
     jsonObject["password"] = this.password;
-    jsonObject["lang_code"] = this.lang_code;
 
     return jsonObject;
   }

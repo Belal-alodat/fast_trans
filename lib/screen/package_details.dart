@@ -1,15 +1,16 @@
 import 'package:fast_trans/models/package.dart';
-import 'package:fast_trans/rest/address_api.dart';
-import 'package:flutter/material.dart';
 
-import '../core/app_session.dart';
-import '../rest/package_api.dart';
+import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:provider/provider.dart';
+import '../providers/Auth.dart';
+import '../providers/shipment_provider.dart';
 import '../util/dialogue.dart';
 import '../util/exception_handler.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 import '../widget/round_elevated_button.dart';
-import '../widget/round_text_field.dart';
+
 
 class PackageDetailsPage extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _PackageDetailsState extends State<PackageDetailsPage> {
   final TextEditingController dimensionController = TextEditingController();
   Map<String, Product> products = {};
   Map<String, Dimension> dimensions = {};
-  PackageAPI packageAPI =   PackageAPI(AppSession.instance.token);
+
   @override
   void didChangeDependencies() {
     print('didChangeDependencies');
@@ -36,16 +37,20 @@ class _PackageDetailsState extends State<PackageDetailsPage> {
   List<String> productList = [];
   List<String> dimensionList = [];
   Widget build(BuildContext context) {
-    products = AppSession.instance.products;
-    dimensions = AppSession.instance.dimensions;
-    productList = AppSession.instance.productList ;//products.keys.map((e) => e).toList();
-    dimensionList = AppSession.instance.dimensionList;  //dimensions.keys.map((e) => e).toList();
+
+    Direction direction = context.locale.languageCode == 'ar'
+        ? Direction.left
+        : Direction.right;
+
+    products = Provider.of<Auth>(context, listen: false).products;
+    dimensions = Provider.of<Auth>(context, listen: false).dimensions;
+    productList = Provider.of<Auth>(context, listen: false).productList ;//products.keys.map((e) => e).toList();
+    dimensionList = Provider.of<Auth>(context, listen: false).dimensionList;  //dimensions.keys.map((e) => e).toList();
 
     final title = ModalRoute.of(context)!.settings.arguments as String;
     double height = 150.0;
-    Direction direction = AppSession.instance.languageCode == 'ar'
-        ? Direction.left
-        : Direction.right;
+
+
 
     return Scaffold(
       appBar: AppBar(title: WidgetUtil.text('Create Package', color: Colors.white)),
@@ -193,8 +198,8 @@ class _PackageDetailsState extends State<PackageDetailsPage> {
 
 
     try{
-      if(_isFav) await  packageAPI.savePackage(package);
-      AppSession.instance.packages.insert(0,package);
+      if(_isFav) await  Provider.of<ShipmentProvider>(context, listen: false).savePackage(package);
+      Provider.of<ShipmentProvider>(context, listen: false).packages.insert(0,package);
       Navigator.pop(context);
     } catch (error) {
       var errorMessage = ExceptionHandler.handleException(error);

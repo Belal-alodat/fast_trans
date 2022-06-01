@@ -1,15 +1,15 @@
-import 'package:fast_trans/rest/address_api.dart';
 import 'package:flutter/material.dart';
-
-import '../core/app_session.dart';
+import 'package:provider/provider.dart';
 import '../models/address.dart';
+import '../providers/Auth.dart';
 import '../util/dialogue.dart';
 import '../util/exception_handler.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 import '../widget/round_elevated_button.dart';
 import '../widget/round_text_field.dart';
-
+import '../providers/shipment_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 class AddressesPage extends StatefulWidget {
   @override
   _AddressesState createState() => _AddressesState();
@@ -17,7 +17,7 @@ class AddressesPage extends StatefulWidget {
 
 class _AddressesState extends State<AddressesPage> {
   bool _isSaveing = false;
-  AddressApi addressApi = AddressApi(AppSession.instance.token);
+ // AddressApi addressApi = AddressApi(AppSession.instance.token);
   final TextEditingController nameController = TextEditingController();
   final TextEditingController streetController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
@@ -43,13 +43,15 @@ class _AddressesState extends State<AddressesPage> {
   List<String> citiesList = [];
 
   Widget build(BuildContext context) {
-    cities = AppSession.instance.cities;
-    citiesList = AppSession.instance.citiesList;
-    final title = ModalRoute.of(context)!.settings.arguments as String;
-    double height = 150.0;
-    Direction direction = AppSession.instance.languageCode == 'ar'
+    Direction direction = context.locale.languageCode == 'ar'
         ? Direction.left
         : Direction.right;
+
+    cities = Provider.of<Auth>(context, listen: false).cities;
+    citiesList = Provider.of<Auth>(context, listen: false).citiesList;
+    final title = ModalRoute.of(context)!.settings.arguments as String;
+    double height = 150.0;
+
 
     return Scaffold(
       appBar: AppBar(title: WidgetUtil.text('Create ${title} Address', color: Colors.white)),
@@ -308,12 +310,11 @@ class _AddressesState extends State<AddressesPage> {
 
 
     try{
-      if(_isFav) await  addressApi.saveAddress(address);
+      if(_isFav) await  Provider.of<ShipmentProvider>(context, listen: false).saveAddress(address);
   if (title == 'To') {
-    AppSession.instance.toAddresses.insert(0, address);
-
+    Provider.of<ShipmentProvider>(context, listen: false).toAddresses.insert(0, address);
   } else {
-    AppSession.instance.fromAddresses.insert(0, address);
+    Provider.of<ShipmentProvider>(context, listen: false).fromAddresses.insert(0, address);
   }
   Navigator.pop(context);
   } catch (error) {
