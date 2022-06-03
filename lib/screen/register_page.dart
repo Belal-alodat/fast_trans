@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/Auth.dart';
+import '../util/widget_util.dart';
 import '../widget/round_elevated_button.dart';
 import '../widget/round_text_field.dart';
 
 class RegisterPage extends StatefulWidget {
+  final String role;
+  const RegisterPage(this.role, {Key? key}) : super(key: key);
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -16,7 +20,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController roleController = TextEditingController();
 
+//  var roleList = ['USER','DRIVER'];
   Widget text(
     String text, {
     Color color = Colors.black,
@@ -56,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
               const SizedBox(height: 24),
-              text(tr('Register '), size: 40, color: Colors.black),
+              text(tr('Register ${this.widget.role}'), size: 40, color: Colors.black),
               const SizedBox(height: 64),
               RoundTextField(
                 hintText: "full name",
@@ -107,6 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: passwordController,
                   enabledBorderSideColor: Colors.blue,
                   focusedBorderSideColor: Colors.blue),
+
               const SizedBox(height: 14),
               RoundElevatedButton(
                 buttonText: tr('register'),
@@ -140,6 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
       password: password,
       mobile: mobile,
       email: email,
+      role: this.widget.role
     );
     goToLogin();
     /*} catch (error) {

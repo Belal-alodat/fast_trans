@@ -10,7 +10,7 @@ class RegisterApi extends AuthAPI {
     print('on register');
     Map<String, dynamic> requestMap = request.toJson();
 
-    final response = await dioClient.post("/register", data: requestMap);
+    final response = await dioClient.post("/auth/register", data: requestMap);
   }
 }
 
@@ -19,12 +19,13 @@ class RegisterRequest {
   final String password;
   final String mobile;
   final String fullName;
-
+  final String role;
   RegisterRequest({
     required this.email,
     required this.password,
     required this.mobile,
     required this.fullName,
+    required this.role,
   });
 
   Map<String, dynamic> toJson() {
@@ -36,6 +37,8 @@ class RegisterRequest {
     jsonObject["password"] = password;
     jsonObject["fullName"] = fullName;
     jsonObject["mobile"] = mobile;
+    jsonObject["roleName"] = role;
+    print('role=$role');
     jsonObject0["credentials"] = jsonObject;
     return jsonObject0;
   }

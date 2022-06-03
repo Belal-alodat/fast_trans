@@ -23,7 +23,7 @@ class ShipmentProvider with ChangeNotifier {
      addressApi = AddressApi(token);
      packageAPI = PackageAPI(token);
    }
-  Future<void> saveShipment(ShipmentRequest shipmentRequest) async {
+  Future<void> saveShipment(Shipment shipmentRequest) async {
  //   print('toAddress=${shipmentRequest.toJson()}');
     await shipmentApi!.addShipment(shipmentRequest);
     //notifyListeners();
@@ -54,5 +54,7 @@ class ShipmentProvider with ChangeNotifier {
      PackageResponse addressResponse = await packageAPI!.getPackages();
      packages = addressResponse.packages;
    }
+
+
 
 }

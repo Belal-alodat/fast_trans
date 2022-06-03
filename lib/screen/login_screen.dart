@@ -103,10 +103,10 @@ class LoginPageState extends State<LoginPage> {
                     children: [
                       InkWell(
                         child: text(
-                          tr('join now'),
+                          tr('join now As Driver'),
                         ),
                         onTap: () {
-                          Navigator.pushNamed(context, '/register');
+                          Navigator.pushNamed(context, '/register-driver');
                         },
                       ),
                       const VerticalDivider(
@@ -114,9 +114,11 @@ class LoginPageState extends State<LoginPage> {
                         thickness: 2,
                       ),
                       InkWell(
-                        child: text(tr('forgetPassword2')),
+                        child: text(
+                          tr('join now As Supplier'),
+                        ),
                         onTap: () {
-                          //  dProvider.changeScreen(RegisterPage());
+                          Navigator.pushNamed(context, '/register-supplier');
                         },
                       ),
                     ],
@@ -149,7 +151,7 @@ class LoginPageState extends State<LoginPage> {
       if (errorMessage == ExceptionHandler.KUnAuthorized) {
         errorMessage = ExceptionHandler.kInvalidCredentials;
       }
-      Dialogs.showErrorDialog(errorMessage, context);
+      Dialogs.showErrorDialog(errorMessage, context,() {Navigator.of(context).pop();},);
     }
   }
 }

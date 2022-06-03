@@ -91,6 +91,7 @@ class Auth with ChangeNotifier {
       {required String email,
       required String password,
       required String fullName,
+        required String role,
       required String mobile}) async {
     RegisterApi registerApi = RegisterApi();
     RegisterRequest registerRequest = RegisterRequest(
@@ -98,6 +99,7 @@ class Auth with ChangeNotifier {
       password: password,
       mobile: mobile,
       email: email,
+      role:role,
     );
     await registerApi.register(registerRequest);
   }

@@ -6,7 +6,7 @@ class CustomerLoginApi extends AuthAPI {
     //  print('on login');
     Map<String, dynamic> requestMap = request.toJson();
 
-    final response = await dioClient.post("/login", data: requestMap);
+    final response = await dioClient.post("/auth/login", data: requestMap);
     // print('response here');
     LoginResponse loginResponse = LoginResponse.fromJson(response);
     //  print('loginResponse${loginResponse.token}');

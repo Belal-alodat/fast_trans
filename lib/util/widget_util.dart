@@ -63,6 +63,10 @@ class WidgetUtil {
         bool isDrop = false,
         List<String> items = const [],
         PopupMenuItemSelected<String>? onSelected,
+        Color borderSideColor =   Colors.white,
+        Color iconColor = const Color(0xFFB6C7D1),
+        Color hintTextColor =const Color(0xFFB6C7D1),
+
       }) {
     return RoundTextField(
       labelText: labelText,
@@ -71,14 +75,14 @@ class WidgetUtil {
       items: items,
       onSelected: onSelected,
       // hintText: "info@demouri.com",
-      hintTextColor: const Color(0xFFB6C7D1),
+      hintTextColor: hintTextColor,
       hintFontSize: 14.0,
       //     icon: Icons.mail_outline,
-      iconColor: const Color(0xFFB6C7D1),
+      iconColor: iconColor,
       bottomPadding: 10,
       controller: controller,
-      enabledBorderSideColor: Colors.white,
-      focusedBorderSideColor: Colors.white,
+      enabledBorderSideColor: borderSideColor,
+      focusedBorderSideColor: borderSideColor,
       //   isEmail: true,
     );
   }

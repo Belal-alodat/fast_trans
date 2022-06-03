@@ -5,7 +5,8 @@ import 'providers/Auth.dart';
 import 'screen/register_page.dart';
 
 class RegisterHomeScreen extends StatefulWidget {
-  const RegisterHomeScreen({Key? key}) : super(key: key);
+  final String role;
+  const RegisterHomeScreen(this.role, {Key? key}) : super(key: key);
 
   @override
   RegisterScreenState createState() => RegisterScreenState();
@@ -27,7 +28,7 @@ class RegisterScreenState extends State<RegisterHomeScreen> {
           value: Auth(),
         ),
       ],
-      child: Consumer<Auth>(builder: (ctx, auth, _) => RegisterPage()),
+      child: Consumer<Auth>(builder: (ctx, auth, _) => RegisterPage(widget.role)),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/Auth.dart';
+import '../../../providers/Auth.dart';
 
 class TextPage extends StatefulWidget {
   @override
@@ -228,9 +228,7 @@ class _TextPageState extends State<TextPage> {
     );
   }
 
-  logout() async {
-    await Provider.of<Auth>(context, listen: false).logout();
-  }
+
 }
 
 enum Direction { right, left }

@@ -5,10 +5,10 @@ import 'package:dio/dio.dart';
 import '../services/dio_client.dart';
 import 'auth_api_base.dart';
 
-class SupplierAPI {
+class OperatorAPI {
   DioClient? dioClient ;
 
-  SupplierAPI(String token) {
+  OperatorAPI(String token) {
     dioClient = DioClient(AuthAPI.baseUrl, Dio(), headers: {
       HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
        HttpHeaders.authorizationHeader: 'Bearer $token',

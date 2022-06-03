@@ -3,13 +3,14 @@ import 'package:fast_trans/models/package.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
-import '../providers/Auth.dart';
-import '../providers/shipment_provider.dart';
-import '../util/dialogue.dart';
-import '../util/exception_handler.dart';
-import '../util/widget_util.dart';
-import '../widget/card_with_colored_edge.dart';
-import '../widget/round_elevated_button.dart';
+import '../../providers/Auth.dart';
+import '../../providers/shipment_provider.dart';
+import '../../providers/shipment_provider.dart';
+import '../../util/dialogue.dart';
+import '../../util/exception_handler.dart';
+import '../../util/widget_util.dart';
+import '../../widget/card_with_colored_edge.dart';
+import '../../widget/round_elevated_button.dart';
 
 
 class PackageDetailsPage extends StatefulWidget {
@@ -206,7 +207,7 @@ class _PackageDetailsState extends State<PackageDetailsPage> {
       if (errorMessage == ExceptionHandler.KUnAuthorized) {
         errorMessage = ExceptionHandler.kInvalidCredentials;
       }
-      Dialogs.showErrorDialog(errorMessage, context);
+      Dialogs.showErrorDialog(errorMessage, context,() {Navigator.of(context).pop();},);
       setState(() {
         _isSaveing = false;
       });

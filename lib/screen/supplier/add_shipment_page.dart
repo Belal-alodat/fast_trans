@@ -2,22 +2,24 @@ import 'package:fast_trans/rest/address_api.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
-import '../providers/shipment_provider.dart';
-import '../models/address.dart';
-import '../models/package.dart';
-import '../providers/Auth.dart';
+import '../../models/address.dart';
+import '../../providers/shipment_provider.dart';
+import '../../models/address.dart';
+import '../../models/package.dart';
+import '../../providers/Auth.dart';
 
-import '../rest/address_api.dart';
-import '../rest/package_api.dart';
-import '../rest/shipment_api.dart';
-import '../util/widget_util.dart';
-import '../widget/card_with_colored_edge.dart';
-import '../widget/round_elevated_button.dart';
+import '../../rest/address_api.dart';
+import '../../rest/package_api.dart';
+import '../../rest/shipment_api.dart';
+import '../../util/widget_util.dart';
+import '../../widget/card_with_colored_edge.dart';
+import '../../widget/round_elevated_button.dart';
 
 class AddShipmentPage extends StatefulWidget {
   @override
   _AddShipmentState createState() => _AddShipmentState();
 }
+
 
 class _AddShipmentState extends State<AddShipmentPage> {
 
@@ -246,7 +248,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
   }
 
   void _submit() async{
-    ShipmentRequest shipmentRequest = ShipmentRequest(
+    Shipment shipmentRequest = Shipment(
         shipmentPackage: shipmentPackage!,
         toAddress: toAddress!,
         fromAddress: fromAddress!);

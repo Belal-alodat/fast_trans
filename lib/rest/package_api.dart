@@ -7,11 +7,11 @@ class PackageAPI extends SupplierAPI {
 
   Future<void> savePackage(Package request) async {
     Map<String, dynamic> requestMap = request.toJson();
-      await dioClient!.post("/packages", data: requestMap);
+      await dioClient!.post("/suppliers/packages", data: requestMap);
   }
 
   Future<PackageResponse> getPackages() async {
-    final response = await dioClient!.get("/packages");
+    final response = await dioClient!.get("/suppliers/packages");
     PackageResponse addressResponse = await PackageResponse.fromJson(response);
     return addressResponse;
   }
