@@ -7,12 +7,18 @@ import 'package:provider/provider.dart';
 import './generated/codegen_loader.g.dart';
 import 'providers/Auth.dart';
 import 'providers/address_provider.dart';
+import 'providers/driver_provider.dart';
 import 'providers/operator_provider.dart';
-import 'providers/shipment_provider.dart';
+import 'providers/customer_provider.dart';
 import 'register_home.dart';
 import 'rest/shipment_api.dart';
+import 'screen/driver/confirm_shipment.dart';
+import 'screen/driver/driver_list_shipment.dart';
+import 'screen/driver/driver_update_shipment_page.dart';
 import 'screen/examples/pages/TextFieldExample.dart';
 import 'screen/examples/pages/Text_page.dart';
+import 'screen/operator/operator_list_shipment.dart';
+import 'screen/operator/update_operator_shipment_page.dart';
 import 'screen/supplier/add_shipment_page.dart';
 import 'screen/supplier/addresses_page.dart';
 import 'screen/examples/pages/counter.dart';
@@ -21,6 +27,8 @@ import 'screen/supplier/list_addresses_page.dart';
 import 'screen/supplier/list_packages_page.dart';
 import 'screen/operator/assign_driver.dart';
 import 'screen/operator/assign_shipment.dart';
+import 'screen/supplier/list_shipment.dart';
+import 'screen/supplier/update_shipment_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,15 +60,20 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: AddressProvider(),
         ),
-        ChangeNotifierProxyProvider<Auth, ShipmentProvider>(
-          create: (BuildContext context) => ShipmentProvider(Provider.of<Auth>(context, listen: false).token),
-          update: (_, auth, __) => ShipmentProvider(auth.token),
+        ChangeNotifierProxyProvider<Auth, CustomerProvider>(
+          create: (BuildContext context) => CustomerProvider(Provider.of<Auth>(context, listen: false).token),
+          update: (_, auth, __) => CustomerProvider(auth.token),
         ),
 
         ChangeNotifierProxyProvider<Auth, OperatorProvider>(
           create: (BuildContext context) => OperatorProvider(Provider.of<Auth>(context, listen: false).token),
           update: (_, auth, __) => OperatorProvider(auth.token),
         ),
+        ChangeNotifierProxyProvider<Auth, DriverProvider>(
+          create: (BuildContext context) => DriverProvider(Provider.of<Auth>(context, listen: false).token),
+          update: (_, auth, __) => DriverProvider(auth.token),
+        ),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -93,10 +106,33 @@ class MyApp extends StatelessWidget {
           '/counter': (context) => Counter(),
           '/package': (context) => PackageDetailsPage(),
           '/list-package': (context) => ListPackagesPage(),
-          '/${ShipmentStatus.Assigned_For_Picking.name}':(_)=>AssignShipment(ShipmentStatus.Assigned_For_Picking),
-          '/${ShipmentStatus.Assigned_For_Picking.name}/driver':(_)=>PickingDriver(ShipmentStatus.Assigned_For_Picking),
-          '/${ShipmentStatus.Assigned_For_Delivery.name}':(_)=>AssignShipment(ShipmentStatus.Assigned_For_Delivery),
-          '/${ShipmentStatus.Assigned_For_Delivery.name}/driver':(_)=>PickingDriver(ShipmentStatus.Assigned_For_Delivery),
+
+          '/${ShipmentStatus.Driver_Picked.name}':(_)=>ConfirmShipment(ShipmentStatus.Driver_Picked),
+          '/${ShipmentStatus.Driver_Delivered.name}':(_)=>ConfirmShipment(ShipmentStatus.Driver_Delivered),
+
+
+          '/drivers/${ShipmentStatus.Operator_Assigned_For_Picking.name}':(_)=>DriverListShipment(ShipmentStatus.Operator_Assigned_For_Picking),
+          '/drivers/${ShipmentStatus.Operator_Assigned_For_Delivery.name}':(_)=>DriverListShipment(ShipmentStatus.Operator_Assigned_For_Delivery),
+          '/drivers/UpdateShipmentPage' :(_)=>DriverUpdateShipmentPage(),
+
+
+          '/operators/${ShipmentStatus.Customer_Submitted.name}':(_)=>OperatorListShipment(ShipmentStatus.Customer_Submitted),
+          '/operators/${ShipmentStatus.Driver_Stored.name}':(_)=>OperatorListShipment(ShipmentStatus.Driver_Stored),
+          '/operators/UpdateShipmentPage' :(_)=>UpdateOperatorShipmentPage(),
+
+          '/operators/${ShipmentStatus.Customer_Accepted.name}':(_)=>AssignShipment(ShipmentStatus.Customer_Accepted),
+          '/operators/${ShipmentStatus.Customer_Accepted.name}/driver':(_)=>PickingDriver(ShipmentStatus.Customer_Accepted),
+
+          '/operators/${ShipmentStatus.Operator_Store_Accepted.name}':(_)=>AssignShipment(ShipmentStatus.Operator_Store_Accepted),
+          '/operators/${ShipmentStatus.Operator_Store_Accepted.name}/driver':(_)=>PickingDriver(ShipmentStatus.Operator_Store_Accepted),
+
+
+          '/customer/${ShipmentStatus.Customer_Submitted.name}':(_)=>ListShipment(ShipmentStatus.Customer_Submitted),
+          '/customer/${ShipmentStatus.Operator_Accepted.name}':(_)=>ListShipment(ShipmentStatus.Operator_Accepted),
+          '/Customer/UpdateShipmentPage' :(_)=>UpdateShipmentPage(),
+
+
+
 
 
           //  '/example1':(_)=>MyHomePage(title: 'example1'),

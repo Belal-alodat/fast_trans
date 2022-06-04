@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import '../../providers/Auth.dart';
-import '../../providers/shipment_provider.dart';
-import '../../providers/shipment_provider.dart';
+import '../../providers/customer_provider.dart';
+import '../../providers/customer_provider.dart';
 import '../../util/dialogue.dart';
 import '../../util/exception_handler.dart';
 import '../../util/widget_util.dart';
@@ -199,8 +199,8 @@ class _PackageDetailsState extends State<PackageDetailsPage> {
 
 
     try{
-      if(_isFav) await  Provider.of<ShipmentProvider>(context, listen: false).savePackage(package);
-      Provider.of<ShipmentProvider>(context, listen: false).packages.insert(0,package);
+      if(_isFav) await  Provider.of<CustomerProvider>(context, listen: false).savePackage(package);
+      Provider.of<CustomerProvider>(context, listen: false).packages.insert(0,package);
       Navigator.pop(context);
     } catch (error) {
       var errorMessage = ExceptionHandler.handleException(error);

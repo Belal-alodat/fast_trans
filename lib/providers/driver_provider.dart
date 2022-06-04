@@ -13,14 +13,14 @@ import 'Auth.dart';
 
 
 
-class OperatorProvider with ChangeNotifier {
+class DriverProvider with ChangeNotifier {
 
    final String token ;
     ShipmentApi? shipmentApi ;//= ShipmentApi(auth.token);
    AddressApi? addressApi;
    PackageAPI? packageAPI ;
    DriverApi? driverApi ;
-   OperatorProvider(this.token){
+   DriverProvider(this.token){
      shipmentApi = ShipmentApi(token);
      driverApi = DriverApi(token);
      packageAPI = PackageAPI(token);
@@ -38,12 +38,12 @@ class OperatorProvider with ChangeNotifier {
    }
 
    Future<void> updateShipmentsStatus(int ShipmentId,ShipmentStatus status) async {
-     return  await shipmentApi!.updateShipmentsStatus(ShipmentId,status,basepath: '/operators');
+     return  await shipmentApi!.updateShipmentsStatus(ShipmentId,status,basepath: '/drivers');
    }
 
    Future<List<Shipment>> getShipmentsWithStatus( ShipmentStatus status) async {
      try{
-       return  await shipmentApi!.getShipmentsWithStatus(status,'/operators');
+       return  await shipmentApi!.getShipmentsWithStatus(status,'/drivers');
      } catch (error) {
 
        var errorMessage = ExceptionHandler.handleException(error);

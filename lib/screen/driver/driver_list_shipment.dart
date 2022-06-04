@@ -1,28 +1,26 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import '../../models/address.dart';
+import '../../providers/driver_provider.dart';
 import '../../providers/operator_provider.dart';
 import '../../providers/customer_provider.dart';
 import '../../models/package.dart';
-import '../../rest/driver_api.dart';
 import '../../rest/shipment_api.dart';
-import '../../util/dialogue.dart';
-import '../../util/exception_handler.dart';
 import '../../util/widget_util.dart';
 import '../../widget/card_with_colored_edge.dart';
 
-class PickingDriver extends StatefulWidget {
+
+
+class DriverListShipment extends StatefulWidget {
   ShipmentStatus _shipmentStatus;
-    PickingDriver(this._shipmentStatus);
+    DriverListShipment(this._shipmentStatus);
   @override
-  _PickingDriverState createState() => _PickingDriverState();
+  _DriverListShipmentState createState() => _DriverListShipmentState();
 }
 
-class _PickingDriverState extends State<PickingDriver> {
-
+class _DriverListShipmentState extends State<DriverListShipment> {
+  List<Shipment> list = [];
   @override
   ScrollController _scrollController = ScrollController();
  void didChangeDependencies() async {
@@ -30,22 +28,19 @@ class _PickingDriverState extends State<PickingDriver> {
      //list = await ;
   }
   Widget build(BuildContext context) {
-
-    final shipmentId = ModalRoute.of(context)!.settings.arguments as int;
-
-    print('PickingDriver: shipmentId=$shipmentId');
     Direction direction = context.locale.languageCode == 'ar'
         ? Direction.left
         : Direction.right;
 
-    String title = 'Assign Driver';
-  //  List<Package> packages = Provider.of<ShipmentProvider>(context, listen: false).packages;
 
-    print('_ListAddressesState build ');
+
+    String title = 'List shipment ${widget._shipmentStatus.name}';
+    //  print('_ListAddressesState build ');
     double height = 150.0;
 
 
     return Scaffold(
+
 
       appBar: AppBar(
         title: WidgetUtil.text(title),
@@ -54,14 +49,14 @@ class _PickingDriverState extends State<PickingDriver> {
         child: SingleChildScrollView(
           controller: _scrollController,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child:FutureBuilder<List<Driver>>(
-            future: Provider.of<OperatorProvider>(context, listen: false).getDrivers(),
-            builder:(BuildContext context, AsyncSnapshot<List<Driver>> snapshot){
+          child:FutureBuilder<List<Shipment>>(
+            future: Provider.of<DriverProvider>(context, listen: false).getShipmentsWithStatus(widget._shipmentStatus),
+            builder:(BuildContext context, AsyncSnapshot<List<Shipment>> snapshot){
               return snapshot.hasData ?
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: getChildren(shipmentId, snapshot.data, height, direction),
+                children: getChildren( snapshot.data, height, direction),
               ):
               Center(
                 child: Column(
@@ -88,59 +83,17 @@ class _PickingDriverState extends State<PickingDriver> {
     );
   }
 
-  List<Widget> getChildren(int shipmentId,
-      List<Driver>? list, double height, Direction direction) {
+  List<Widget> getChildren(
+      List<Shipment>? list, double height, Direction direction) {
     List<Widget> children = [];
     for (int i = 0; i < list!.length; i++) {
       children.add(const SizedBox(height: 10));
       children.add(InkWell(
-          onTap: () {
-            final driverId = list[i].id;
+          onTap: ()async {
             print('selected cared index $i');
-            //Navigator.pushNamed(context, '/s',arguments:list[i].id );
-            Dialogs.SaveDialog('Are sure?', context, () async {
-              print('hi');
-              Navigator.of(context).pop();
-              showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (ctx) {
+            Navigator.pushNamed(context, '/drivers/UpdateShipmentPage',arguments:list[i] ).then((value) => setState(() {
+            }))   ;
 
-
-                    Provider.of<OperatorProvider>(context, listen: false).addPickupshipmentToDriver(shipmentId,driverId,widget._shipmentStatus).then(
-                            (value) {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                              Navigator.popAndPushNamed(context, '/operators/${widget._shipmentStatus.name}');
-                            }
-                    ).catchError(  (error) {
-
-                      var errorMessage = ExceptionHandler.handleException(error);
-                      print("errorMessage= $errorMessage error=$error");
-                      if (errorMessage == ExceptionHandler.KUnAuthorized) {
-                        errorMessage = ExceptionHandler.kInvalidCredentials;
-                      }
-                      Dialogs.showErrorDialog(errorMessage, context,() {Navigator.of(context).pop();Navigator.of(context).pop();},);
-
-                    }
-                    );
-
-                    return  WillPopScope(
-
-                      onWillPop: () async => false,
-                      child: AlertDialog(
-                        title: Text('saving ..'),
-                        content: Text('saving ..'),
-                        actions: <Widget>[
-                        ],
-                      ),
-                    );
-
-
-                  }
-              );
-
-              },);
           },
           child: CardWithColoredEdge(
             isRedEdge: false,
@@ -156,13 +109,34 @@ class _PickingDriverState extends State<PickingDriver> {
     return children;
   }
 
-  Widget getWidget10( Driver driver,Color backgroundColor,) {
-
+  Widget getWidget10( Shipment shipment,Color backgroundColor,) {
+    var address = shipment.fromAddress;
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 0, 15, 5),
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.fromLTRB(0, 0, 15, 15),
+                height: 30,
+                width: 30,
+                alignment: Alignment.center,
+                // padding: const EdgeInsets.fromLTRB(0, 0, 15, 25),
+                //    color: Colors.black,
 
+                child: Icon(
+                  Icons.favorite,
+                  color: address.favourite ? Colors.red :Colors.white70,
+                  //size: 30,
+
+                ),
+                //  color: Colors.black,
+              ),
+
+            ],
+          ),
           Row(
             children: [
               Container(
@@ -179,7 +153,7 @@ class _PickingDriverState extends State<PickingDriver> {
                   //  color: Colors.red,
                   child: Text(
                     textAlign: TextAlign.center,
-                    driver.account.fullName  ,
+                    address.fullName ?? '',
                     overflow: TextOverflow.ellipsis,
                     style:
                     TextStyle(color: backgroundColor, fontFamily: 'loewm'),
@@ -193,7 +167,7 @@ class _PickingDriverState extends State<PickingDriver> {
             children: [
               Container(
                 //   color: Colors.red,
-                child: WidgetUtil.text('Email', color: backgroundColor),
+                child: WidgetUtil.text('Address', color: backgroundColor),
               ),
               SizedBox(width: 15),
               Container(
@@ -205,7 +179,7 @@ class _PickingDriverState extends State<PickingDriver> {
                   //  color: Colors.red,
                   child: Text(
                     textAlign: TextAlign.center,
-                    driver.account.email ,
+                    '${address.city?.name}-${address.town?.name}-${address.village?.name}',
                     overflow: TextOverflow.ellipsis,
                     style:
                     TextStyle(color: backgroundColor, fontFamily: 'loewm'),
@@ -232,7 +206,7 @@ class _PickingDriverState extends State<PickingDriver> {
                   //  color: Colors.red,
                   child: Text(
                     textAlign: TextAlign.center,
-                    driver.account.mobile ,
+                    address.mobile??'',
                     overflow: TextOverflow.ellipsis,
                     style:
                     TextStyle(color: backgroundColor, fontFamily: 'loewm'),

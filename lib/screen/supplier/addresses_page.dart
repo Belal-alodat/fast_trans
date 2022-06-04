@@ -9,7 +9,7 @@ import '../../util/widget_util.dart';
 import '../../widget/card_with_colored_edge.dart';
 import '../../widget/round_elevated_button.dart';
 import '../../widget/round_text_field.dart';
-import '../../providers/shipment_provider.dart';
+import '../../providers/customer_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 class AddressesPage extends StatefulWidget {
   @override
@@ -311,11 +311,11 @@ class _AddressesState extends State<AddressesPage> {
 
 
     try{
-      if(_isFav) await  Provider.of<ShipmentProvider>(context, listen: false).saveAddress(address);
+      if(_isFav) await  Provider.of<CustomerProvider>(context, listen: false).saveAddress(address);
   if (title == 'To') {
-    Provider.of<ShipmentProvider>(context, listen: false).toAddresses.insert(0, address);
+    Provider.of<CustomerProvider>(context, listen: false).toAddresses.insert(0, address);
   } else {
-    Provider.of<ShipmentProvider>(context, listen: false).fromAddresses.insert(0, address);
+    Provider.of<CustomerProvider>(context, listen: false).fromAddresses.insert(0, address);
   }
   Navigator.pop(context);
   } catch (error) {

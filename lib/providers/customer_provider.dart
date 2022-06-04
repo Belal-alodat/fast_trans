@@ -7,18 +7,19 @@ import '../models/package.dart';
 import '../rest/address_api.dart';
 import '../rest/package_api.dart';
 import '../rest/shipment_api.dart';
+import '../util/exception_handler.dart';
 import 'Auth.dart';
 
 
 
-class ShipmentProvider with ChangeNotifier {
+class CustomerProvider with ChangeNotifier {
 
    final String token ;
     ShipmentApi? shipmentApi ;//= ShipmentApi(auth.token);
    AddressApi? addressApi;
    PackageAPI? packageAPI ;
 
-   ShipmentProvider(this.token){
+   CustomerProvider(this.token){
      shipmentApi = ShipmentApi(token);
      addressApi = AddressApi(token);
      packageAPI = PackageAPI(token);
@@ -56,5 +57,25 @@ class ShipmentProvider with ChangeNotifier {
    }
 
 
+   Future<void> updateShipmentsStatus(int ShipmentId,ShipmentStatus status) async {
+     return  await shipmentApi!.updateShipmentsStatus(ShipmentId,status,basepath: '/suppliers');
+   }
+
+   Future<List<Shipment>> getShipmentsWithStatus( ShipmentStatus status) async {
+     try{
+       return  await shipmentApi!.getShipmentsWithStatus(status,'/suppliers');
+     } catch (error) {
+
+       var errorMessage = ExceptionHandler.handleException(error);
+       print("errorMessage= $errorMessage error=$error");
+       if (errorMessage == ExceptionHandler.KUnAuthorized) {
+         errorMessage = ExceptionHandler.kInvalidCredentials;
+       }
+       List<Shipment> empty = [];
+       return empty;
+       //Dialogs.showErrorDialog(errorMessage, context,() {Navigator.of(context).pop();},);
+     }
+     //notifyListeners();
+   }
 
 }

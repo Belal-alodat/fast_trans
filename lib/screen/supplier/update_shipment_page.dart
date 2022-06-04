@@ -11,22 +11,22 @@ import '../../providers/Auth.dart';
 import '../../rest/address_api.dart';
 import '../../rest/package_api.dart';
 import '../../rest/shipment_api.dart';
+import '../../rest/shipment_api.dart';
 import '../../util/widget_util.dart';
 import '../../widget/card_with_colored_edge.dart';
 import '../../widget/round_elevated_button.dart';
 
-class AddShipmentPage extends StatefulWidget {
+class UpdateShipmentPage extends StatefulWidget {
   @override
-  _AddShipmentState createState() => _AddShipmentState();
+  _UpdateShipmentState createState() => _UpdateShipmentState();
 }
 
 
-class _AddShipmentState extends State<AddShipmentPage> {
+class _UpdateShipmentState extends State<UpdateShipmentPage> {
 
-  Address? toAddress;
-  Address? fromAddress;
-  Package? shipmentPackage;
-  var _dueDate = DateTime.now();
+
+
+
   Widget getCard(
       String image, String label, String ObjectString, Direction direction) {
     double height = 50.0;
@@ -37,15 +37,16 @@ class _AddShipmentState extends State<AddShipmentPage> {
       Colors.red,
       direction,
       getCardWidgets(image, label, ObjectString == null  ? '': ObjectString, Colors.white),
-      row3children: getCardRow3Widget(height),
+     // row3children: getCardRow3Widget(height),
     );
   }
 
 
-
-  Widget build(BuildContext context) {
+    Shipment? shipment ;
+      Widget build(BuildContext context) {
    // var lang =  context.locale.languageCode == 'ar' ? 'ar' : '';
-  print('context.locale.languageCode = ${context.locale.languageCode }');
+      shipment = ModalRoute.of(context)!.settings.arguments as Shipment;
+  print('shipment = ${shipment?.id }');
     Direction direction = context.locale.languageCode == 'ar'
         ? Direction.left
         : Direction.right;
@@ -64,27 +65,23 @@ class _AddShipmentState extends State<AddShipmentPage> {
                 InkWell(
                   onTap: from,
                   child: getCard('images/from.png', 'From',
-                      fromAddress == null ? '':'${fromAddress?.fullName}', direction),
+                      shipment?.fromAddress == null ? '':'${shipment?.fromAddress.fullName}', direction),
                 ),
                 const SizedBox(height: 24),
                 InkWell(
                   onTap: to,
                   child: getCard(
-                      'images/to.png', 'To', toAddress == null ? '':'${toAddress?.fullName}', direction),
+                      'images/to.png', 'To', shipment?.toAddress == null ? '':'${shipment?.toAddress.fullName}', direction),
                 ),
                 const SizedBox(height: 24),
                 InkWell(
                   onTap: PackageDetails,
                   child: getCard('images/packagedetails.png', 'Package Details',
-                      shipmentPackage == null ? '':'${shipmentPackage?.product?.name}' , direction),
+                      shipment?.shipmentPackage == null ? '':'${shipment?.shipmentPackage.product?.name}' , direction),
                 ),
 
                 const SizedBox(height: 24),
-                InkWell(
-                  onTap: _pickDate,
-                  child: getCard('images/transit.png', 'Pickup Date',
-                      _dueDate == null ? '':'${DateFormat('yyyy-MM-dd').format(_dueDate)}' , direction),
-                ),
+
               //  buildDateField( context),
                 Padding(
                   padding:
@@ -92,25 +89,57 @@ class _AddShipmentState extends State<AddShipmentPage> {
                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        if(shipment?.status != ShipmentStatus.Operator_Accepted.index)
                         Expanded(
                           child: RoundElevatedButton(
-                            child: getButtonText('submit'),
+                            child: getButtonText('delete'),
                             color: Colors.blueAccent,
-                            onPressed: _submit,
+                            onPressed: _delete,
                             radius: 30,
                             minimumSizeFromHeight: 0,
                           ),
                         ),
+
+                        if(shipment?.status == ShipmentStatus.Operator_Accepted.index)
+
+                          Expanded(
+                            child: RoundElevatedButton(
+                              child: getButtonText('Accept'),
+                              color: Colors.blueAccent,
+                              onPressed: _accept,
+                              radius: 30,
+                              minimumSizeFromHeight: 0,
+                            ),
+                          ),
                         const SizedBox(width: 24),
+                        if(shipment?.status != ShipmentStatus.Operator_Accepted.index)
                         Expanded(
                           child: RoundElevatedButton(
-                            child: getButtonText('reset'),
+                            child: getButtonText('back'),
                             color: Colors.blueAccent,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                             radius: 30,
                             minimumSizeFromHeight: 0,
                           ),
                         ),
+
+
+
+                        if(shipment?.status == ShipmentStatus.Operator_Accepted.index)
+
+                          Expanded(
+                            child: RoundElevatedButton(
+                              child: getButtonText('Rejected'),
+                              color: Colors.blueAccent,
+                              onPressed: _reject,
+                              radius: 30,
+                              minimumSizeFromHeight: 0,
+                            ),
+                          )
+
+
                       ]),
                 ),
               ],
@@ -167,122 +196,42 @@ class _AddShipmentState extends State<AddShipmentPage> {
     );
   }
 
-  List<Widget> getCardRow3Widget(double height) {
-    return [
-      Center(
-        child: Container(
-          height: height,
-          //  color: Colors.amberAccent,
-          child: const Icon(
-            Icons.arrow_forward_ios_sharp,
-            color: Colors.white,
-            //size: 30,
-          ),
-          //  color: Colors.black,
-        ),
-      ),
-      const SizedBox(width: 5),
-    ];
-  }
 
-  logout() async {
-    await Provider.of<Auth>(context, listen: false).logout();
-  }
 
   void from() async {
 
-  //  AddressResponse addressResponse = await addressApi.getFromAddress();
-   // AppSession.instance.fromAddresses = addressResponse.addresses;
-    await Provider.of<CustomerProvider>(context, listen: false).getFromAddress();
 
-    final result = await Navigator.pushNamed(context, '/list-addresses',
-        arguments: 'From');
-    print('From list index =${result.toString()}');
-
-    try {
-      int index = int.parse(result!.toString());
-
-      setState(() {
-        fromAddress =  Provider.of<CustomerProvider>(context, listen: false).fromAddresses[index];
-      });
-      print('fromAddress ${fromAddress?.fullName}');
-    } catch (e) {
-      print('null result');
-    }
   }
   //AddressApi  addressApi = AddressApi(AppSession.instance.token);
  // PackageAPI packageAPI = PackageAPI(AppSession.instance.token);
   void to() async {
 
-    await Provider.of<CustomerProvider>(context, listen: false).getToAddress();
 
-    //AddressResponse addressResponse = await addressApi.getToAddress();
-
-    //AppSession.instance.toAddresses = addressResponse.addresses;
-    final result =
-        await Navigator.pushNamed(context, '/list-addresses', arguments: 'To');
-    print('To list index =${result.toString()}');
-    try {
-      int index = int.parse(result!.toString());
-      setState(() {
-        toAddress = Provider.of<CustomerProvider>(context, listen: false).toAddresses[index];
-      });
-
-      print('toAddress ${toAddress?.fullName}');
-    } catch (e) {
-      print('null result');
-    }
   }
 
   Future<void> PackageDetails() async {
 
-    //PackageResponse packageResponse = await packageAPI.getPackages();
-    //AppSession.instance.packages = packageResponse.packages;
-    await Provider.of<CustomerProvider>(context, listen: false).getPackages();
-    final result =
-        await Navigator.pushNamed(context, '/list-package');
 
-    print('To list index =${result.toString()}');
-
-    try {
-      int index = int.parse(result!.toString());
-      setState(() {
-        shipmentPackage = Provider.of<CustomerProvider>(context, listen: false).packages[index];
-      });
-
-      print('shipmentPackage ${shipmentPackage?.product?.name}');
-    } catch (e) {
-      print('null result');
-    }
 
 
   }
 
-  void _submit() async{
-    Shipment shipmentRequest = Shipment(
-      status: ShipmentStatus.Customer_Submitted.index,
-      pickupDate: DateFormat('yyyy-MM-dd').format(_dueDate),
-        shipmentPackage: shipmentPackage!,
-        toAddress: toAddress!,
-        fromAddress: fromAddress!);
-    await Provider.of<CustomerProvider>(context, listen: false).saveShipment(shipmentRequest);
-    Navigator.pop(context);
-  }
-
-  void _pickDate()async {
-    final currentDate = _dueDate ;
-// 7
-    final selectedDate = await showDatePicker(
-      context: context,
-      initialDate: currentDate,
-      firstDate: currentDate,
-      lastDate: DateTime(currentDate.year + 5),
+  void _delete() async{
+    Provider.of<CustomerProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Customer_Canceled).then((value) =>
+        Navigator.pop(context)
     );
-// 8
-    setState(() {
-      if (selectedDate != null) {
-        _dueDate = selectedDate;
-      }
-    });
+
+  }
+
+  void _accept() {
+    Provider.of<CustomerProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Customer_Accepted).then((value) =>
+        Navigator.pop(context)
+    );
+  }
+
+  void _reject() {
+    Provider.of<CustomerProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Customer_Rejected).then((value) =>
+        Navigator.pop(context)
+    );
   }
 }

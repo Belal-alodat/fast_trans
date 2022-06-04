@@ -13,12 +13,14 @@ class Auth with ChangeNotifier {
   Auth() {}
   bool _isAuth = false;
   String _token = '';
+  String role = '';
   String get token => _token;
   get isAuth => _isAuth;
 
   logout() {
     _isAuth = false;
     _token ="";
+    role = '';
     //AppSession.instance.isLogin = false;
    // AppSession.instance.token = "";
     //AppSession.instance.fromAddresses = [];
@@ -81,6 +83,7 @@ class Auth with ChangeNotifier {
    // AppSession.instance.isLogin = true;
     //AppSession.instance.token = customerLoginResponse.token;
     _isAuth = true;
+    role = customerLoginResponse.role;
     _token = customerLoginResponse.token;
 
     notifyListeners();

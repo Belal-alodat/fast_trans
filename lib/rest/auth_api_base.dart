@@ -11,5 +11,7 @@ class AuthAPI {
   });
 
   //static const String _baseUrl = 'http://192.168.100.39:1990/auth';
-  static const String baseUrl = 'http://fasttrans-env.eba-x83wwcgk.us-east-1.elasticbeanstalk.com';
+  static const String baseUrl = 'http://192.168.100.109:5000';
+
+  //static const String baseUrl = 'http://fasttrans-env.eba-x83wwcgk.us-east-1.elasticbeanstalk.com';
 }

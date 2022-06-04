@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import '../../models/address.dart';
-import '../../providers/shipment_provider.dart';
+import '../../providers/customer_provider.dart';
 import '../../util/widget_util.dart';
 import '../../widget/card_with_colored_edge.dart';
 
@@ -22,11 +22,11 @@ class _ListAddressesState extends State<ListAddressesPage> {
         : Direction.right;
 
 
-    List<Address> addresses =  Provider.of<ShipmentProvider>(context, listen: false).fromAddresses;
+    List<Address> addresses =  Provider.of<CustomerProvider>(context, listen: false).fromAddresses;
     final title = ModalRoute.of(context)!.settings.arguments as String;
     if (title == 'To') {
       print('toAddresses');
-      addresses =  Provider.of<ShipmentProvider>(context, listen: false).toAddresses;
+      addresses =  Provider.of<CustomerProvider>(context, listen: false).toAddresses;
     } else {
       print('fromAddresses');
     }

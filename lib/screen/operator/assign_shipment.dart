@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import '../../models/address.dart';
 import '../../providers/operator_provider.dart';
-import '../../providers/shipment_provider.dart';
+import '../../providers/customer_provider.dart';
 import '../../models/package.dart';
 import '../../rest/shipment_api.dart';
 import '../../util/widget_util.dart';
@@ -89,7 +89,7 @@ class _AssignShipmentState extends State<AssignShipment> {
       children.add(InkWell(
           onTap: () {
             print('selected cared index $i');
-            Navigator.pushNamed(context, '/${widget._shipmentStatus.name}/driver',arguments:list[i].id );
+            Navigator.pushNamed(context, '/operators/${widget._shipmentStatus.name}/driver',arguments:list[i].id );
           },
           child: CardWithColoredEdge(
             isRedEdge: false,

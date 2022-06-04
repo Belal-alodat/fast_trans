@@ -33,7 +33,7 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = 't3@com';
+    nameController.text = 't@com';
     passwordController.text = '123123';
     return SafeArea(
       child: Scaffold(

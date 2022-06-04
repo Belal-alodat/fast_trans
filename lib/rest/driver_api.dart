@@ -32,8 +32,17 @@ class DriverApi extends OperatorAPI {
     return drivers;
   }
 
+
+
   Future<void> addPickupshipmentToDriver(int shipmentId, int driverId,ShipmentStatus shipmentStatus) async{
-     await dioClient!.post("/operators/drivers/$driverId/shipment/$shipmentId/status/${shipmentStatus.index+1}");
+    if(shipmentStatus == ShipmentStatus.Customer_Accepted) {
+
+      await dioClient!.post(
+          "/operators/drivers/$driverId/shipment/$shipmentId/status/${ShipmentStatus.Operator_Assigned_For_Picking.index}");
+    }else{
+      await dioClient!.post(
+          "/operators/drivers/$driverId/shipment/$shipmentId/status/${ShipmentStatus.Operator_Assigned_For_Delivery.index}");
+    }
   }
 }
 class Driver {

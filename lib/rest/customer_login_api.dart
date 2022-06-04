@@ -15,13 +15,14 @@ class CustomerLoginApi extends AuthAPI {
 }
 
 class LoginResponse {
-  String statusCode = '';
+  String role = '';
   String token = '';
 
-  LoginResponse({required this.statusCode, required this.token});
+  LoginResponse({required this.role, required this.token});
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
-    token = json['jwt-token'];
+    token = json['token'];
+    role = json['role'];
     // print('loginResponse=$token');
   }
 }

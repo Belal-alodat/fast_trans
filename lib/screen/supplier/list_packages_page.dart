@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import '../../models/package.dart';
-import '../../providers/shipment_provider.dart';
+import '../../providers/customer_provider.dart';
 import '../../models/package.dart';
 import '../../util/widget_util.dart';
 import '../../widget/card_with_colored_edge.dart';
@@ -25,7 +25,7 @@ class _ListPackagesState extends State<ListPackagesPage> {
         : Direction.right;
 
     String title = 'packages';
-    List<Package> packages = Provider.of<ShipmentProvider>(context, listen: false).packages;
+    List<Package> packages = Provider.of<CustomerProvider>(context, listen: false).packages;
 
     print('_ListAddressesState build ');
     double height = 150.0;
