@@ -37,13 +37,13 @@ class DriverProvider with ChangeNotifier {
      //notifyListeners();
    }
 
-   Future<void> updateShipmentsStatus(int ShipmentId,ShipmentStatus status) async {
-     return  await shipmentApi!.updateShipmentsStatus(ShipmentId,status,basepath: '/drivers');
+   Future<void> updateDriverShipmentsStatus(int ShipmentId,int status,ShipmentStatus toStatus) async {
+     return  await shipmentApi!.updateDriverShipmentsStatus(ShipmentId,status,toStatus,basepath: '/drivers');
    }
 
-   Future<List<Shipment>> getShipmentsWithStatus( ShipmentStatus status) async {
+   Future<List<Shipment>> getShipmentsWithStatus( List<ShipmentStatus> statusList) async {
      try{
-       return  await shipmentApi!.getShipmentsWithStatus(status,'/drivers');
+       return  await shipmentApi!.getShipmentsWithStatus(statusList,'/drivers');
      } catch (error) {
 
        var errorMessage = ExceptionHandler.handleException(error);

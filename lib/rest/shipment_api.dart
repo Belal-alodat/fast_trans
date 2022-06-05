@@ -13,9 +13,9 @@ enum ShipmentStatus{Customer_Submitted,Operator_Assigned_For_Picking  ,Driver_Pi
   ,Driver_pick_Accepted,Driver_pick_Rejected,Driver_Stored,Driver_deliver_Accepted,Driver_deliver_Rejected,}
 
 main() async {
-  ShipmentApi shipmentApi = ShipmentApi('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJZT1VSIEFQUExJQ0FUSU9OL1BST0pFQ1QvQ09NUEFOWSBOQU1FIiwiaWF0IjoxNjUyODU5NDE4LCJlbWFpbCI6InRAY29tIn0.GOkvwWjP5cZBN0Cswn-0zprEZhLIAec0I-zwbH6rVSs');
+  ShipmentApi shipmentApi = ShipmentApi('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkQGNvbSIsInJvbGVzIjoiUk9MRV9EUklWRVIiLCJpYXQiOjE2NTQ0MjI3OTIsImV4cCI6MTY1NDQ0MDc5Mn0.BmYoXHDxMGqqdHSBsU0JXW6cfL9p-bUzgouczfVe_DU');
 
-  List<Shipment> ships =  await shipmentApi.getShipmentsWithStatus(ShipmentStatus.Operator_Assigned_For_Picking,'/operators');
+  List<Shipment> ships =  await shipmentApi.getShipmentsWithStatus([ShipmentStatus.Driver_pick_Accepted,ShipmentStatus.Driver_Picked,ShipmentStatus.Driver_deliver_Accepted],'/drivers');
   for (Shipment ship in ships) {
     print('ship=${ship.id}');
   }
@@ -33,6 +33,15 @@ class ShipmentApi extends SupplierAPI {
     final response = await dioClient!.post("/suppliers/shipments", data: requestMap);
   }
 
+
+  Future<void> updateDriverShipmentsStatus(int ShipmentId,int status,ShipmentStatus toStatus,{String basepath ='/suppliers'}) async {
+    print('on updateDriverShipmentsStatus');
+
+    String uri ='$basepath/shipments/$ShipmentId/status/${status}/to/${toStatus.index}';
+
+    final response = await dioClient!.patch(uri);
+  }
+
   Future<void> updateShipmentsStatus(int ShipmentId,ShipmentStatus status,{String basepath ='/suppliers'}) async {
     print('on updateShipmentsStatus');
 
@@ -45,9 +54,17 @@ class ShipmentApi extends SupplierAPI {
     return await getShipmentsWithStatus( 1);
   }*/
 
-  Future<List<Shipment>> getShipmentsWithStatus( ShipmentStatus status,String basepath) async{
-    print('on getShipmentWithStatus');
-    final shipmentsAsJson = await dioClient!.get("$basepath/shipments?status=${status.index}");
+
+  Future<List<Shipment>> getShipmentsWithStatus( List<ShipmentStatus> statusList,String basepath) async{
+    String stattusStr = '';
+    if(statusList.length > 1) {
+      for (ShipmentStatus status in statusList) {
+        stattusStr += '${status.index},';
+      }
+    }else{
+      stattusStr += '${statusList[0].index}';
+    }
+    final shipmentsAsJson = await dioClient!.get("$basepath/shipments?status=${stattusStr}");
        List<Shipment> shipments= [];
 
     for (Map<String, dynamic> shipmentJson in shipmentsAsJson) {

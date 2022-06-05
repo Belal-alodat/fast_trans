@@ -13,7 +13,7 @@ import '../../widget/card_with_colored_edge.dart';
 
 
 class DriverListShipment extends StatefulWidget {
-  ShipmentStatus _shipmentStatus;
+  List<ShipmentStatus> _shipmentStatus;
     DriverListShipment(this._shipmentStatus);
   @override
   _DriverListShipmentState createState() => _DriverListShipmentState();
@@ -34,7 +34,7 @@ class _DriverListShipmentState extends State<DriverListShipment> {
 
 
 
-    String title = 'List shipment ${widget._shipmentStatus.name}';
+    String title = 'List shipment ${widget._shipmentStatus[0].name}';
     //  print('_ListAddressesState build ');
     double height = 150.0;
 

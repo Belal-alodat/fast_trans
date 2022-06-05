@@ -90,37 +90,7 @@ class _DriverUpdateShipmentState extends State<DriverUpdateShipmentPage> {
                       const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-
-                          Expanded(
-                            child: RoundElevatedButton(
-                              child: getButtonText('Accept'),
-                              color: Colors.blueAccent,
-                              onPressed: _accept,
-                              radius: 30,
-                              minimumSizeFromHeight: 0,
-                            ),
-                          ),
-                        const SizedBox(width: 24),
-
-
-
-
-
-
-                          Expanded(
-                            child: RoundElevatedButton(
-                              child: getButtonText('Rejected'),
-                              color: Colors.blueAccent,
-                              onPressed: _reject,
-                              radius: 30,
-                              minimumSizeFromHeight: 0,
-                            ),
-                          )
-
-
-                      ]),
+                      children: getActionButtons(shipment) ),
                 ),
               ],
             ),
@@ -196,14 +166,14 @@ class _DriverUpdateShipmentState extends State<DriverUpdateShipmentPage> {
 
   }
 
-
+void _back(){ Navigator.pop(context);}
   void _accept() {
      if(ShipmentStatus.Operator_Assigned_For_Picking.index == shipment!.status)
-    Provider.of<DriverProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Driver_pick_Accepted).then((value) =>
+    Provider.of<DriverProvider>(context, listen: false).updateDriverShipmentsStatus(shipment!.id,shipment!.status,ShipmentStatus.Driver_pick_Accepted).then((value) =>
         Navigator.pop(context)
     );
      else
-       Provider.of<DriverProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Driver_deliver_Accepted).then((value) =>
+       Provider.of<DriverProvider>(context, listen: false).updateDriverShipmentsStatus(shipment!.id,shipment!.status,ShipmentStatus.Driver_deliver_Accepted).then((value) =>
            Navigator.pop(context)
        );
   }
@@ -213,15 +183,104 @@ class _DriverUpdateShipmentState extends State<DriverUpdateShipmentPage> {
         print('reeject shipment!.status =${shipment!.status}');
     if(ShipmentStatus.Operator_Assigned_For_Picking.index == shipment!.status) {
       Provider.of<DriverProvider>(context, listen: false)
-          .updateShipmentsStatus(
-          shipment!.id, ShipmentStatus.Driver_pick_Rejected)
+          .updateDriverShipmentsStatus(
+          shipment!.id,shipment!.status ,ShipmentStatus.Driver_pick_Rejected)
           .then((value) =>
           Navigator.pop(context)
       );
       print('reeject Driver_pick_Rejected =${ShipmentStatus.Driver_pick_Rejected}');
     }else
-    Provider.of<DriverProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Driver_deliver_Rejected).then((value) =>
+    Provider.of<DriverProvider>(context, listen: false).updateDriverShipmentsStatus(shipment!.id,shipment!.status,ShipmentStatus.Driver_deliver_Rejected).then((value) =>
         Navigator.pop(context)
     );
+  }
+  void _picked() {
+
+    Provider.of<DriverProvider>(context, listen: false)
+        .updateDriverShipmentsStatus(
+        shipment!.id, shipment!.status, ShipmentStatus.Driver_Picked)
+        .then((value) =>
+        Navigator.pop(context)
+    );
+  }
+
+  void _stord() {
+
+    Provider.of<DriverProvider>(context, listen: false)
+        .updateDriverShipmentsStatus(
+        shipment!.id, shipment!.status, ShipmentStatus.Driver_Stored)
+        .then((value) =>
+        Navigator.pop(context)
+    );
+  }
+
+  void _Delivered() {
+
+    Provider.of<DriverProvider>(context, listen: false)
+        .updateDriverShipmentsStatus(
+        shipment!.id, shipment!.status, ShipmentStatus.Driver_Delivered)
+        .then((value) =>
+        Navigator.pop(context)
+    );
+  }
+
+  getActionButtons(Shipment? shipment) {
+print('getActionButtons');
+    //[ShipmentStatus.Driver_pick_Accepted
+// ,ShipmentStatus.Driver_Picked,
+// ShipmentStatus.Driver_deliver_Accepted]),
+
+String label1 = 'Accept';
+String label2 ='Rejected';
+  VoidCallback? f1 = _accept;
+  VoidCallback? f2 = _reject;
+
+  if  (shipment!.status == ShipmentStatus.Driver_pick_Accepted.index )
+
+    {
+      label1 = 'Picked';
+      label2= 'back';
+      f1=_picked;
+      f2=_back;
+    }else if  (shipment!.status == ShipmentStatus.Driver_Picked.index ){
+    label1 = 'Stored';
+    label2= 'back';
+    f1=_stord;
+    f2=_back;
+  }else if  (shipment!.status == ShipmentStatus.Operator_Store_Rejected.index ){
+      label1 = 'Stored';
+      label2= 'back';
+      f1=_stord;
+      f2=_back;
+    }else if  (shipment!.status == ShipmentStatus.Driver_deliver_Accepted.index ){
+    label1 = 'Delivered';
+    label2= 'back';
+    f1=_Delivered;
+    f2=_back;
+  }
+  return
+    [
+      Expanded(
+        child: RoundElevatedButton(
+          child: getButtonText(label1),
+          color: Colors.blueAccent,
+          onPressed: f1,
+          radius: 30,
+          minimumSizeFromHeight: 0,
+        ),
+      ),
+      const SizedBox(width: 24),
+      Expanded(
+        child: RoundElevatedButton(
+          child: getButtonText(label2),
+          color: Colors.blueAccent,
+          onPressed: f2,
+          radius: 30,
+          minimumSizeFromHeight: 0,
+        ),
+      )
+    ];
+
+
   }
 }

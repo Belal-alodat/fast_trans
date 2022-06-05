@@ -110,9 +110,9 @@ class MyApp extends StatelessWidget {
           '/${ShipmentStatus.Driver_Picked.name}':(_)=>ConfirmShipment(ShipmentStatus.Driver_Picked),
           '/${ShipmentStatus.Driver_Delivered.name}':(_)=>ConfirmShipment(ShipmentStatus.Driver_Delivered),
 
-
-          '/drivers/${ShipmentStatus.Operator_Assigned_For_Picking.name}':(_)=>DriverListShipment(ShipmentStatus.Operator_Assigned_For_Picking),
-          '/drivers/${ShipmentStatus.Operator_Assigned_For_Delivery.name}':(_)=>DriverListShipment(ShipmentStatus.Operator_Assigned_For_Delivery),
+          '/drivers/actions':(_)=>DriverListShipment([ShipmentStatus.Driver_Picked,ShipmentStatus.Driver_pick_Accepted,ShipmentStatus.Operator_Store_Rejected,ShipmentStatus.Driver_deliver_Accepted]),
+          '/drivers/${ShipmentStatus.Operator_Assigned_For_Picking.name}':(_)=>DriverListShipment([ShipmentStatus.Operator_Assigned_For_Picking]),
+          '/drivers/${ShipmentStatus.Operator_Assigned_For_Delivery.name}':(_)=>DriverListShipment([ShipmentStatus.Operator_Assigned_For_Delivery]),
           '/drivers/UpdateShipmentPage' :(_)=>DriverUpdateShipmentPage(),
 
 

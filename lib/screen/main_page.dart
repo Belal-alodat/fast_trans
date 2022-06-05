@@ -36,6 +36,7 @@ class _MainPageState extends State<MainPage> {
     ]:widget.role.contains('ROLE_DRIVER') ?
     [
 
+    ItemMenuType('test2', false, "images/Gps$lang.png", '/drivers/actions'),
       ItemMenuType('test3', false, "images/myShipments$lang.png", '/drivers/${ShipmentStatus.Operator_Assigned_For_Picking.name}'),
       ItemMenuType('test5', false, "images/Track$lang.png", '/drivers/${ShipmentStatus.Operator_Assigned_For_Delivery.name}'),
     ]:[

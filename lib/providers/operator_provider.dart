@@ -43,7 +43,7 @@ class OperatorProvider with ChangeNotifier {
 
    Future<List<Shipment>> getShipmentsWithStatus( ShipmentStatus status) async {
      try{
-       return  await shipmentApi!.getShipmentsWithStatus(status,'/operators');
+       return  await shipmentApi!.getShipmentsWithStatus([status],'/operators');
      } catch (error) {
 
        var errorMessage = ExceptionHandler.handleException(error);

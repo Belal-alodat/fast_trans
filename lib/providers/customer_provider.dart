@@ -63,7 +63,7 @@ class CustomerProvider with ChangeNotifier {
 
    Future<List<Shipment>> getShipmentsWithStatus( ShipmentStatus status) async {
      try{
-       return  await shipmentApi!.getShipmentsWithStatus(status,'/suppliers');
+       return  await shipmentApi!.getShipmentsWithStatus([status],'/suppliers');
      } catch (error) {
 
        var errorMessage = ExceptionHandler.handleException(error);
