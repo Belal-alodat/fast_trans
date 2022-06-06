@@ -55,7 +55,14 @@ class CustomerProvider with ChangeNotifier {
      PackageResponse addressResponse = await packageAPI!.getPackages();
      packages = addressResponse.packages;
    }
+   Future<List<Package>> getPackages2() async {
 
+     PackageResponse addressResponse = await packageAPI!.getPackages();
+     packages = addressResponse.packages;
+
+     print('getPackages2() ${packages[0].price}');
+     return packages;
+   }
 
    Future<void> updateShipmentsStatus(int ShipmentId,ShipmentStatus status) async {
      return  await shipmentApi!.updateShipmentsStatus(ShipmentId,status,basepath: '/suppliers');

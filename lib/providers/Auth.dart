@@ -28,6 +28,55 @@ class Auth with ChangeNotifier {
    // AppSession.instance.packages = [];
     notifyListeners();
   }
+  // enum ShipmentStatus{Customer_Submitted,Operator_Assigned_For_Picking  ,Driver_Picked,
+  // Operator_Assigned_For_Delivery,Driver_Delivered
+  // ,Customer_Canceled,Customer_Rejected,Customer_Accepted
+  // ,Operator_Rejected,Operator_Accepted,Operator_Store_Rejected,Operator_Store_Accepted
+  // ,Driver_pick_Accepted,Driver_pick_Rejected,Driver_Stored,Driver_deliver_Accepted,Driver_deliver_Rejected,}
+    String getShipmentStatusLabel(int status){
+   //  if(role.contains('ROLE_SUPPLIER') )
+       switch (status) {
+         case 0:
+           return "Submitted";
+         case 1:
+           return "Operator_Assigned_For_Picking";
+         case 2:
+           return "Driver_Picked";
+         case 3:
+           return "Operator_Assigned_For_Delivery";
+         case 4:
+           return "Driver_Delivered";
+         case 5:
+           return "Customer_Canceled";
+         case 6:
+           return "Customer_Rejected";
+         case 7:
+           return "Customer_Accepted";
+         case 8:
+           return "Operator_Rejected";
+         case 9:
+           return "Operator_Accepted";
+         case 10:
+           return "Operator_Store_Rejected";
+         case 11:
+           return "Operator_Store_Accepted";
+         case 12:
+           return "Driver_pick_Accepted";
+         case 13:
+           return "Driver_pick_Rejected";
+         case 14:
+           return "Driver_Stored";
+         case 15:
+           return "Driver_deliver_Accepted";
+         case 16:
+           return "Driver_deliver_Rejected";
+
+
+     }
+
+
+         return '';
+    }
 
   Future<void> login(String username, String password) {
     print('login');

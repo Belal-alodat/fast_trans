@@ -3,7 +3,7 @@ import 'package:fast_trans/home.dart';
 import 'package:fast_trans/screen/register_page.dart';
 import 'package:flutter/material.dart';
 
-import './generated/codegen_loader.g.dart';
+import '../generated/codegen_loader.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

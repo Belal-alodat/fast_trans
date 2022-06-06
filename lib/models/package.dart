@@ -6,9 +6,9 @@ class PackageResponse {
 
   PackageResponse.fromJson(List<dynamic> json) {
 
-    for ( dynamic address in json) {
+    for ( dynamic package in json) {
       // int id = address['id'];
-      packages.add(Package.fromJson(address));
+      packages.add(Package.fromJson(package));
 
     }
   }
@@ -36,13 +36,19 @@ class Package {
 
     try {
       id = int.parse(jsonObject["id"]);
-    }catch(_){}
+    }catch(_){
+
+   //   print(jsonObject["id"]);
+
+    }
     try {
-    price = double.parse( jsonObject["price"]  );
+    price =   jsonObject["price"]   as double;
+  }catch(e){
+
+    }
+    try { weight =  jsonObject["weight"]  as double;
   }catch(_){}
-    try { weight = double.parse( jsonObject["weight"] );
-  }catch(_){}
-    try {  pieces = int.parse(jsonObject["pieces"] );
+    try {  pieces =  jsonObject["pieces"] as int;
 }catch(_){}
      product = Product.fromJson(jsonObject["product"] ) ;
      dimension = Dimension.fromJson(jsonObject["dimension"] ) ;

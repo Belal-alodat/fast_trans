@@ -30,20 +30,22 @@ class _MainPageState extends State<MainPage> {
     // passwordController.text = 'Az123456789';
     List<ItemMenuType> itemTypeList =
     widget.role.contains('ROLE_SUPPLIER') ?  [
-      ItemMenuType('test1', false, 'images/myShipments$lang.png', '/customer/${ShipmentStatus.Customer_Submitted.name}'),
-      ItemMenuType('test1', false, 'images/Track$lang.png', '/customer/${ShipmentStatus.Operator_Accepted.name}'),
+      ItemMenuType('create Shipment', false, 'images/myShipments$lang.png', '/customer/${ShipmentStatus.Customer_Submitted.name}'),
+      ItemMenuType('Accept the shipment Cost', false, 'images/Track$lang.png', '/customer/${ShipmentStatus.Operator_Accepted.name}'),
+      ItemMenuType('see shipments', false, 'images/Track$lang.png', '/customers/shipments'),
+
 
     ]:widget.role.contains('ROLE_DRIVER') ?
     [
 
-    ItemMenuType('test2', false, "images/Gps$lang.png", '/drivers/actions'),
-      ItemMenuType('test3', false, "images/myShipments$lang.png", '/drivers/${ShipmentStatus.Operator_Assigned_For_Picking.name}'),
-      ItemMenuType('test5', false, "images/Track$lang.png", '/drivers/${ShipmentStatus.Operator_Assigned_For_Delivery.name}'),
+    ItemMenuType('Shipments Actions', false, "images/Gps$lang.png", '/drivers/actions'),
+      ItemMenuType('Accept Shipments picking', false, "images/myShipments$lang.png", '/drivers/${ShipmentStatus.Operator_Assigned_For_Picking.name}'),
+      ItemMenuType('Accept Shipments Delivery', false, "images/Track$lang.png", '/drivers/${ShipmentStatus.Operator_Assigned_For_Delivery.name}'),
     ]:[
-      ItemMenuType('test1', false, "images/cust$lang.png", '/operators/${ShipmentStatus.Operator_Store_Accepted.name}'),
-      ItemMenuType('test2', false, "images/Gps$lang.png", '/operators/${ShipmentStatus.Customer_Accepted.name}'),
-      ItemMenuType('test3', false, "images/myShipments$lang.png", '/operators/${ShipmentStatus.Driver_Stored.name}'),
-      ItemMenuType('test5', false, "images/Track$lang.png", '/operators/${ShipmentStatus.Customer_Submitted.name}'),
+      ItemMenuType('Assign Driver to deliver shipment', false, "images/cust$lang.png", '/operators/${ShipmentStatus.Operator_Store_Accepted.name}'),
+      ItemMenuType('Assign Driver to pick shipment', false, "images/Gps$lang.png", '/operators/${ShipmentStatus.Customer_Accepted.name}'),
+      ItemMenuType('Add shipments to Store', false, "images/myShipments$lang.png", '/operators/${ShipmentStatus.Driver_Stored.name}'),
+      ItemMenuType('Evaluate shipments cost', false, "images/Track$lang.png", '/operators/${ShipmentStatus.Customer_Submitted.name}'),
     ];
     return Scaffold(
       body: SafeArea(

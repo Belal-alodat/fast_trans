@@ -51,22 +51,63 @@ class _ListPackagesState extends State<ListPackagesPage> {
         title: WidgetUtil.text(title),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: getChildren(packages, height, direction),
-          ),
-        ),
+        child: getList1(packages,height,  direction),
+       // child: getList2(height,  direction),
       ),
     );
   }
 
+  Widget getList1(List<Package> packages,double height, Direction direction) {
+    return SingleChildScrollView(
+      controller: _scrollController,
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: getChildren(packages, height, direction),
+      ),
+    );
+  }
+  Widget getList2(double height, Direction direction){
+   return  SingleChildScrollView(
+        controller: _scrollController,
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child:FutureBuilder<List<Package>>(
+          future: Provider.of<CustomerProvider>(context, listen: false).getPackages2(),
+          builder:(BuildContext context, AsyncSnapshot<List<Package>> snapshot){
+            return snapshot.hasData ?
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: getChildren( snapshot.data, height, direction),
+            ):
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    child: CircularProgressIndicator(),
+                    width: 60,
+                    height: 60,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Loading data from API...'),
+                  )
+                ],
+              ),
+            ) ;
+
+          } ,
+        )
+    );
+  }
+
   List<Widget> getChildren(
-      List<Package> packages, double height, Direction direction) {
+      List<Package>? packages, double height, Direction direction) {
     List<Widget> children = [];
+    if(packages != null)
     for (int i = 0; i < packages.length; i++) {
       children.add(const SizedBox(height: 10));
       children.add(InkWell(

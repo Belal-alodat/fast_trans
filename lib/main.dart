@@ -10,25 +10,19 @@ import 'providers/address_provider.dart';
 import 'providers/driver_provider.dart';
 import 'providers/operator_provider.dart';
 import 'providers/customer_provider.dart';
+import 'providers/shipments_provider.dart';
 import 'register_home.dart';
 import 'rest/shipment_api.dart';
 import 'screen/driver/confirm_shipment.dart';
-import 'screen/driver/driver_list_shipment.dart';
-import 'screen/driver/driver_update_shipment_page.dart';
-import 'screen/examples/pages/TextFieldExample.dart';
-import 'screen/examples/pages/Text_page.dart';
-import 'screen/operator/operator_list_shipment.dart';
-import 'screen/operator/update_operator_shipment_page.dart';
+import 'screen/update_shipment_status_page.dart';
+import 'screen/list_shipment_with_status.dart';
 import 'screen/supplier/add_shipment_page.dart';
 import 'screen/supplier/addresses_page.dart';
-import 'screen/examples/pages/counter.dart';
-import 'screen/examples/pages/home_page.dart';
 import 'screen/supplier/list_addresses_page.dart';
 import 'screen/supplier/list_packages_page.dart';
 import 'screen/operator/assign_driver.dart';
 import 'screen/operator/assign_shipment.dart';
-import 'screen/supplier/list_shipment.dart';
-import 'screen/supplier/update_shipment_page.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +67,10 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => DriverProvider(Provider.of<Auth>(context, listen: false).token),
           update: (_, auth, __) => DriverProvider(auth.token),
         ),
+        ChangeNotifierProxyProvider<Auth, ShipmentsProvider>(
+          create: (BuildContext context) => ShipmentsProvider(Provider.of<Auth>(context, listen: false).token),
+          update: (_, auth, __) => ShipmentsProvider(auth.token),
+        ),
 
       ],
       child: MaterialApp(
@@ -101,24 +99,29 @@ class MyApp extends StatelessWidget {
           '/shipment': (context) => AddShipmentPage(),
           '/list-addresses': (context) => ListAddressesPage(),
           '/address': (context) => AddressesPage(),
-          '/text2': (context) => TextFieldExample(),
-          '/text': (context) => TextPage(),
-          '/counter': (context) => Counter(),
           '/package': (context) => PackageDetailsPage(),
           '/list-package': (context) => ListPackagesPage(),
 
           '/${ShipmentStatus.Driver_Picked.name}':(_)=>ConfirmShipment(ShipmentStatus.Driver_Picked),
           '/${ShipmentStatus.Driver_Delivered.name}':(_)=>ConfirmShipment(ShipmentStatus.Driver_Delivered),
 
-          '/drivers/actions':(_)=>DriverListShipment([ShipmentStatus.Driver_Picked,ShipmentStatus.Driver_pick_Accepted,ShipmentStatus.Operator_Store_Rejected,ShipmentStatus.Driver_deliver_Accepted]),
-          '/drivers/${ShipmentStatus.Operator_Assigned_For_Picking.name}':(_)=>DriverListShipment([ShipmentStatus.Operator_Assigned_For_Picking]),
-          '/drivers/${ShipmentStatus.Operator_Assigned_For_Delivery.name}':(_)=>DriverListShipment([ShipmentStatus.Operator_Assigned_For_Delivery]),
-          '/drivers/UpdateShipmentPage' :(_)=>DriverUpdateShipmentPage(),
+          // '/drivers/actions':(_)=>DriverListShipment([ShipmentStatus.Driver_Picked,ShipmentStatus.Driver_pick_Accepted,ShipmentStatus.Operator_Store_Rejected,ShipmentStatus.Driver_deliver_Accepted]),
+          // '/drivers/${ShipmentStatus.Operator_Assigned_For_Picking.name}':(_)=>DriverListShipment([ShipmentStatus.Operator_Assigned_For_Picking]),
+          // '/drivers/${ShipmentStatus.Operator_Assigned_For_Delivery.name}':(_)=>DriverListShipment([ShipmentStatus.Operator_Assigned_For_Delivery]),
+
+          '/drivers/actions':(_)=>ListShipmentWithStatus([ShipmentStatus.Driver_Picked,ShipmentStatus.Driver_pick_Accepted,ShipmentStatus.Operator_Store_Rejected,ShipmentStatus.Driver_deliver_Accepted],'list shipments','/drivers','/drivers/UpdateShipmentPage'),
+          '/drivers/${ShipmentStatus.Operator_Assigned_For_Picking.name}':(_)=>ListShipmentWithStatus([ShipmentStatus.Operator_Assigned_For_Picking],'list shipments','/drivers','/drivers/UpdateShipmentPage'),
+          '/drivers/${ShipmentStatus.Operator_Assigned_For_Delivery.name}':(_)=>ListShipmentWithStatus([ShipmentStatus.Operator_Assigned_For_Delivery],'list shipments','/drivers','/drivers/UpdateShipmentPage'),
 
 
-          '/operators/${ShipmentStatus.Customer_Submitted.name}':(_)=>OperatorListShipment(ShipmentStatus.Customer_Submitted),
-          '/operators/${ShipmentStatus.Driver_Stored.name}':(_)=>OperatorListShipment(ShipmentStatus.Driver_Stored),
-          '/operators/UpdateShipmentPage' :(_)=>UpdateOperatorShipmentPage(),
+          '/drivers/UpdateShipmentPage' :(_)=>UpdateShipmentStatusPage(),
+
+
+          '/operators/${ShipmentStatus.Customer_Submitted.name}':(_)=>ListShipmentWithStatus([ShipmentStatus.Customer_Submitted],'list shipments','/operators','/operators/UpdateShipmentPage'),
+          '/operators/${ShipmentStatus.Driver_Stored.name}':(_)=>ListShipmentWithStatus([ShipmentStatus.Driver_Stored],'list shipments','/operators','/operators/UpdateShipmentPage'),
+
+          //'/operators/${ShipmentStatus.Driver_Stored.name}':(_)=>OperatorListShipment(ShipmentStatus.Driver_Stored),
+          '/operators/UpdateShipmentPage' :(_)=>UpdateShipmentStatusPage(),
 
           '/operators/${ShipmentStatus.Customer_Accepted.name}':(_)=>AssignShipment(ShipmentStatus.Customer_Accepted),
           '/operators/${ShipmentStatus.Customer_Accepted.name}/driver':(_)=>PickingDriver(ShipmentStatus.Customer_Accepted),
@@ -127,15 +130,17 @@ class MyApp extends StatelessWidget {
           '/operators/${ShipmentStatus.Operator_Store_Accepted.name}/driver':(_)=>PickingDriver(ShipmentStatus.Operator_Store_Accepted),
 
 
-          '/customer/${ShipmentStatus.Customer_Submitted.name}':(_)=>ListShipment(ShipmentStatus.Customer_Submitted),
-          '/customer/${ShipmentStatus.Operator_Accepted.name}':(_)=>ListShipment(ShipmentStatus.Operator_Accepted),
-          '/Customer/UpdateShipmentPage' :(_)=>UpdateShipmentPage(),
+          '/customer/${ShipmentStatus.Customer_Submitted.name}':
+              (_)=>ListShipmentWithStatus([ShipmentStatus.Customer_Submitted],'Delete shipments','/suppliers','/Customer/UpdateShipmentPage',floatingActionButtonPath: '/shipment'),
 
+          '/customer/${ShipmentStatus.Operator_Accepted.name}':(_)=>ListShipmentWithStatus([ShipmentStatus.Operator_Accepted],'Accept shipments','/suppliers','/Customer/UpdateShipmentPage'),
 
+          '/Customer/UpdateShipmentPage' :(_)=>UpdateShipmentStatusPage(basepath: 'Customer',),
 
+         '/customers/shipments/noAction':(_)=>UpdateShipmentStatusPage(basepath: 'Customer',noAction:true),
 
+          '/customers/shipments':(_)=>ListShipmentWithStatus([ShipmentStatus.Customer_Canceled,ShipmentStatus.Operator_Accepted,ShipmentStatus.Customer_Accepted,ShipmentStatus.Customer_Submitted,ShipmentStatus.Driver_Delivered],'suppliers','/suppliers','/customers/shipments/noAction'),
 
-          //  '/example1':(_)=>MyHomePage(title: 'example1'),
         },
       ),
     );

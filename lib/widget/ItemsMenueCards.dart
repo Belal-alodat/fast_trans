@@ -83,15 +83,19 @@ class CardMenu extends StatelessWidget {
                     width: 4,
                     // color: MyColor.TxtColorOrange,
                     color: Colors.red)
-                : Border.all(color: Colors.white),
+                : Border.all(color: Colors.blueGrey),
             borderRadius: BorderRadius.circular(10.0),
           ),
-          child: Image.asset(
+            child:Center(
+              child: Text(
+    title, textAlign: TextAlign.center,),
+            )
+          /*child: Image.asset(
             imageTitle,
             // width: MediaQuery.of(context).size.width / 12,
             //  height: MediaQuery.of(context).size.width / 12,
             fit: BoxFit.fill,
-          ),
+          ),*/
           /*child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

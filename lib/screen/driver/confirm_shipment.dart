@@ -48,7 +48,7 @@ class _ConfirmShipmentState extends State<ConfirmShipment> {
           controller: _scrollController,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child:FutureBuilder<List<Shipment>>(
-            future: Provider.of<OperatorProvider>(context, listen: false).getShipmentsWithStatus(widget._shipmentStatus),
+            future: Provider.of<OperatorProvider>(context, listen: false).getShipmentsWithStatus([widget._shipmentStatus]),
             builder:(BuildContext context, AsyncSnapshot<List<Shipment>> snapshot){
               return snapshot.hasData ?
               Column(

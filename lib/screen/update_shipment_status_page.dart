@@ -2,29 +2,33 @@ import 'package:fast_trans/rest/address_api.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
-import '../../models/address.dart';
-import '../../providers/customer_provider.dart';
-import '../../models/address.dart';
-import '../../models/package.dart';
-import '../../providers/Auth.dart';
+import '../models/address.dart';
+import '../providers/customer_provider.dart';
+import '../models/address.dart';
+import '../models/package.dart';
+import '../providers/Auth.dart';
 
-import '../../providers/driver_provider.dart';
-import '../../providers/operator_provider.dart';
-import '../../rest/address_api.dart';
-import '../../rest/package_api.dart';
-import '../../rest/shipment_api.dart';
-import '../../rest/shipment_api.dart';
-import '../../util/widget_util.dart';
-import '../../widget/card_with_colored_edge.dart';
-import '../../widget/round_elevated_button.dart';
+import '../providers/driver_provider.dart';
+import '../providers/operator_provider.dart';
+import '../rest/address_api.dart';
+import '../rest/package_api.dart';
+import '../rest/shipment_api.dart';
+import '../rest/shipment_api.dart';
+import '../util/widget_util.dart';
+import '../widget/card_with_colored_edge.dart';
+import '../widget/round_elevated_button.dart';
 
-class DriverUpdateShipmentPage extends StatefulWidget {
+class UpdateShipmentStatusPage extends StatefulWidget {
+
+  UpdateShipmentStatusPage({this.basepath,this.noAction = false});
+  final String ? basepath;
+  final bool  noAction;
   @override
-  _DriverUpdateShipmentState createState() => _DriverUpdateShipmentState();
+  _UpdateShipmentStatusState createState() => _UpdateShipmentStatusState();
 }
 
 
-class _DriverUpdateShipmentState extends State<DriverUpdateShipmentPage> {
+class _UpdateShipmentStatusState extends State<UpdateShipmentStatusPage> {
 
 
 
@@ -48,13 +52,13 @@ class _DriverUpdateShipmentState extends State<DriverUpdateShipmentPage> {
       Widget build(BuildContext context) {
    // var lang =  context.locale.languageCode == 'ar' ? 'ar' : '';
       shipment = ModalRoute.of(context)!.settings.arguments as Shipment;
-  print('DriverUpdateShipmentPage shipment = ${shipment?.id }');
+  print('UpdateShipmentStatusPage shipment = ${shipment?.id }');
     Direction direction = context.locale.languageCode == 'ar'
         ? Direction.left
         : Direction.right;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: WidgetUtil.text('UpdateShipmentStatusPage')),
       body: SafeArea(
         child: /*Consumer<ShipmentProvider>(
           builder: (ctx, shipmentProvider, _) =>*/ SingleChildScrollView(
@@ -62,7 +66,7 @@ class _DriverUpdateShipmentState extends State<DriverUpdateShipmentPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+              children: shipment!=null ? <Widget>[
                 const SizedBox(height: 24),
                 InkWell(
                   onTap: from,
@@ -85,14 +89,12 @@ class _DriverUpdateShipmentState extends State<DriverUpdateShipmentPage> {
                 const SizedBox(height: 24),
 
               //  buildDateField( context),
-                Padding(
+               Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: getActionButtons(shipment) ),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: getActionButtons(shipment!) ),
                 ),
-              ],
+              ]:[],
             ),
           ),
      //   ),
@@ -224,8 +226,55 @@ void _back(){ Navigator.pop(context);}
     );
   }
 
-  getActionButtons(Shipment? shipment) {
-print('getActionButtons');
+
+  void _Customer_delete() async{
+    Provider.of<CustomerProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Customer_Canceled).then((value) =>
+        Navigator.pop(context)
+    );
+
+  }
+
+  void _Customer_accept() {
+    Provider.of<CustomerProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Customer_Accepted).then((value) =>
+        Navigator.pop(context)
+    );
+  }
+
+  void _Customer_reject() {
+    Provider.of<CustomerProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Customer_Rejected).then((value) =>
+        Navigator.pop(context)
+    );
+  }
+
+  void _Operator_Accept() {
+    if(ShipmentStatus.Driver_Stored.index == shipment!.status)
+      Provider.of<OperatorProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Operator_Store_Accepted).then((value) =>
+          Navigator.pop(context)
+      );
+    else
+      Provider.of<OperatorProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Operator_Accepted).then((value) =>
+          Navigator.pop(context)
+      );
+  }
+
+  void _Operator_reject() {
+
+    print('reeject shipment!.status =${shipment!.status}');
+    if(ShipmentStatus.Driver_Stored.index == shipment!.status) {
+      Provider.of<OperatorProvider>(context, listen: false)
+          .updateShipmentsStatus(
+          shipment!.id, ShipmentStatus.Operator_Store_Rejected)
+          .then((value) =>
+          Navigator.pop(context)
+      );
+      print('reeject Operator_Store_Rejected =${ShipmentStatus.Operator_Store_Rejected}');
+    }else
+      Provider.of<OperatorProvider>(context, listen: false).updateShipmentsStatus(shipment!.id,ShipmentStatus.Operator_Rejected).then((value) =>
+          Navigator.pop(context)
+      );
+  }
+  getActionButtons(Shipment  shipment) {
+print('getActionButtons ${shipment.status} ${widget.noAction}');
     //[ShipmentStatus.Driver_pick_Accepted
 // ,ShipmentStatus.Driver_Picked,
 // ShipmentStatus.Driver_deliver_Accepted]),
@@ -234,29 +283,53 @@ String label1 = 'Accept';
 String label2 ='Rejected';
   VoidCallback? f1 = _accept;
   VoidCallback? f2 = _reject;
-
-  if  (shipment!.status == ShipmentStatus.Driver_pick_Accepted.index )
-
-    {
+  if(widget.noAction) {
+      label1 = 'OK';
+      label2 ='back';
+    f1 = _back;
+     f2 = _back;
+  }else{
+    if (shipment.status == ShipmentStatus.Driver_pick_Accepted.index) {
       label1 = 'Picked';
-      label2= 'back';
-      f1=_picked;
-      f2=_back;
-    }else if  (shipment!.status == ShipmentStatus.Driver_Picked.index ){
-    label1 = 'Stored';
-    label2= 'back';
-    f1=_stord;
-    f2=_back;
-  }else if  (shipment!.status == ShipmentStatus.Operator_Store_Rejected.index ){
+      label2 = 'back';
+      f1 = _picked;
+      f2 = _back;
+    } else if (shipment.status == ShipmentStatus.Driver_Picked.index) {
       label1 = 'Stored';
-      label2= 'back';
-      f1=_stord;
-      f2=_back;
-    }else if  (shipment!.status == ShipmentStatus.Driver_deliver_Accepted.index ){
-    label1 = 'Delivered';
-    label2= 'back';
-    f1=_Delivered;
-    f2=_back;
+      label2 = 'back';
+      f1 = _stord;
+      f2 = _back;
+    } else
+    if (shipment.status == ShipmentStatus.Operator_Store_Rejected.index) {
+      label1 = 'Stored';
+      label2 = 'back';
+      f1 = _stord;
+      f2 = _back;
+    } else
+    if (shipment.status == ShipmentStatus.Driver_deliver_Accepted.index) {
+      label1 = 'Delivered';
+      label2 = 'back';
+      f1 = _Delivered;
+      f2 = _back;
+    } else if ((shipment.status == ShipmentStatus.Customer_Submitted.index &&
+        widget.basepath == null) ||
+        shipment.status == ShipmentStatus.Driver_Stored.index) {
+      label1 = 'Accept';
+      label2 = 'Rejected';
+      f1 = _Operator_Accept;
+      f2 = _Operator_reject;
+    } else if (shipment.status == ShipmentStatus.Operator_Accepted.index) {
+      label1 = 'Accept';
+      label2 = 'Rejected';
+      f1 = _Customer_accept;
+      f2 = _Customer_reject;
+    } else if (shipment.status == ShipmentStatus.Customer_Submitted.index &&
+        widget.basepath != null) {
+      label1 = 'delete';
+      label2 = 'back';
+      f1 = _Customer_delete;
+      f2 = _back;
+    }
   }
   return
     [
