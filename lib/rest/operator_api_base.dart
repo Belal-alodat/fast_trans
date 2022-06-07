@@ -15,7 +15,7 @@ class OperatorAPI {
     });
   }
 
-  //  static const String _baseUrl = 'http://192.168.100.39:1990/suppliers';
+  //  static const String _baseUrl = 'http://192.168.100.39:1990/customers';
  // static const String _baseUrl = 'http://192.168.100.39:1990';
 
 }

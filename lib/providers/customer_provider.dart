@@ -65,12 +65,12 @@ class CustomerProvider with ChangeNotifier {
    }
 
    Future<void> updateShipmentsStatus(int ShipmentId,ShipmentStatus status) async {
-     return  await shipmentApi!.updateShipmentsStatus(ShipmentId,status,basepath: '/suppliers');
+     return  await shipmentApi!.updateShipmentsStatus(ShipmentId,status,basepath: '/customers');
    }
 
    Future<List<Shipment>> getShipmentsWithStatus( ShipmentStatus status) async {
      try{
-       return  await shipmentApi!.getShipmentsWithStatus([status],'/suppliers');
+       return  await shipmentApi!.getShipmentsWithStatus([status],'/customers');
      } catch (error) {
 
        var errorMessage = ExceptionHandler.handleException(error);

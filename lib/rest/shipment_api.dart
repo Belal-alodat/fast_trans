@@ -30,11 +30,11 @@ class ShipmentApi extends SupplierAPI {
     print('on register');
     Map<String, dynamic> requestMap = request.toJson();
 
-    final response = await dioClient!.post("/suppliers/shipments", data: requestMap);
+    final response = await dioClient!.post("/customers/shipments", data: requestMap);
   }
 
 
-  Future<void> updateDriverShipmentsStatus(int ShipmentId,int status,ShipmentStatus toStatus,{String basepath ='/suppliers'}) async {
+  Future<void> updateDriverShipmentsStatus(int ShipmentId,int status,ShipmentStatus toStatus,{String basepath ='/customers'}) async {
     print('on updateDriverShipmentsStatus');
 
     String uri ='$basepath/shipments/$ShipmentId/status/${status}/to/${toStatus.index}';
@@ -42,7 +42,7 @@ class ShipmentApi extends SupplierAPI {
     final response = await dioClient!.patch(uri);
   }
 
-  Future<void> updateShipmentsStatus(int ShipmentId,ShipmentStatus status,{String basepath ='/suppliers'}) async {
+  Future<void> updateShipmentsStatus(int ShipmentId,ShipmentStatus status,{String basepath ='/customers'}) async {
     print('on updateShipmentsStatus');
 
     String uri ='$basepath/shipments/$ShipmentId/status/${status.index}';

@@ -24,7 +24,7 @@ class ShipmentsProvider with ChangeNotifier {
     packageAPI = PackageAPI(token);
   }
 
-  Future<List<Shipment>> getShipmentsWithStatus( List<ShipmentStatus> status,{String basepath = '/suppliers'}) async {
+  Future<List<Shipment>> getShipmentsWithStatus( List<ShipmentStatus> status,{String basepath = '/customers'}) async {
     try{
       return  await shipmentApi!.getShipmentsWithStatus(status,basepath);
     } catch (error) {

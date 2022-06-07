@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => HomeScreen(),
           // When navigating to the "/second" route, build the SecondScreen widget.
           '/register-driver': (context) => RegisterHomeScreen ('DRIVER'),
-          '/register-supplier': (context) => RegisterHomeScreen ('SUPPLIER'),
+          '/register-supplier': (context) => RegisterHomeScreen ('CUSTOMER'),
           '/shipment': (context) => AddShipmentPage(),
           '/list-addresses': (context) => ListAddressesPage(),
           '/address': (context) => AddressesPage(),
@@ -131,15 +131,15 @@ class MyApp extends StatelessWidget {
 
 
           '/customer/${ShipmentStatus.Customer_Submitted.name}':
-              (_)=>ListShipmentWithStatus([ShipmentStatus.Customer_Submitted],'Delete shipments','/suppliers','/Customer/UpdateShipmentPage',floatingActionButtonPath: '/shipment'),
+              (_)=>ListShipmentWithStatus([ShipmentStatus.Customer_Submitted],'Delete shipments','/customers','/Customer/UpdateShipmentPage',floatingActionButtonPath: '/shipment'),
 
-          '/customer/${ShipmentStatus.Operator_Accepted.name}':(_)=>ListShipmentWithStatus([ShipmentStatus.Operator_Accepted],'Accept shipments','/suppliers','/Customer/UpdateShipmentPage'),
+          '/customer/${ShipmentStatus.Operator_Accepted.name}':(_)=>ListShipmentWithStatus([ShipmentStatus.Operator_Accepted],'Accept shipments','/customers','/Customer/UpdateShipmentPage'),
 
           '/Customer/UpdateShipmentPage' :(_)=>UpdateShipmentStatusPage(basepath: 'Customer',),
 
          '/customers/shipments/noAction':(_)=>UpdateShipmentStatusPage(basepath: 'Customer',noAction:true),
 
-          '/customers/shipments':(_)=>ListShipmentWithStatus([ShipmentStatus.Customer_Canceled,ShipmentStatus.Operator_Accepted,ShipmentStatus.Customer_Accepted,ShipmentStatus.Customer_Submitted,ShipmentStatus.Driver_Delivered],'suppliers','/suppliers','/customers/shipments/noAction'),
+          '/customers/shipments':(_)=>ListShipmentWithStatus([ShipmentStatus.Customer_Canceled,ShipmentStatus.Operator_Accepted,ShipmentStatus.Customer_Accepted,ShipmentStatus.Customer_Submitted,ShipmentStatus.Driver_Delivered],'suppliers','/customers','/customers/shipments/noAction'),
 
         },
       ),

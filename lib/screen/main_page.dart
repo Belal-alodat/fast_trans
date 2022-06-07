@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fast_trans/Constants.dart';
 import 'package:fast_trans/util/widget_util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,13 +30,13 @@ class _MainPageState extends State<MainPage> {
     // nameController.text = 'modat123';
     // passwordController.text = 'Az123456789';
     List<ItemMenuType> itemTypeList =
-    widget.role.contains('ROLE_SUPPLIER') ?  [
+    widget.role.contains(Constants.CUSTOMER_ROLE) ?  [
       ItemMenuType('create Shipment', false, 'images/myShipments$lang.png', '/customer/${ShipmentStatus.Customer_Submitted.name}'),
       ItemMenuType('Accept the shipment Cost', false, 'images/Track$lang.png', '/customer/${ShipmentStatus.Operator_Accepted.name}'),
       ItemMenuType('see shipments', false, 'images/Track$lang.png', '/customers/shipments'),
 
 
-    ]:widget.role.contains('ROLE_DRIVER') ?
+    ]:widget.role.contains(Constants.DRIVER_ROLE) ?
     [
 
     ItemMenuType('Shipments Actions', false, "images/Gps$lang.png", '/drivers/actions'),
