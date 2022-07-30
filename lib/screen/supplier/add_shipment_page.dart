@@ -51,7 +51,7 @@ class _AddShipmentState extends State<AddShipmentPage> {
         : Direction.right;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title:Text( 'Create Shipments'),),
       body: SafeArea(
         child: /*Consumer<ShipmentProvider>(
           builder: (ctx, shipmentProvider, _) =>*/ SingleChildScrollView(

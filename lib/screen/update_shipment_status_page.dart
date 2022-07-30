@@ -17,6 +17,7 @@ import '../rest/shipment_api.dart';
 import '../util/widget_util.dart';
 import '../widget/card_with_colored_edge.dart';
 import '../widget/round_elevated_button.dart';
+import '../widget/round_text_field.dart';
 
 class UpdateShipmentStatusPage extends StatefulWidget {
 
@@ -58,7 +59,7 @@ class _UpdateShipmentStatusState extends State<UpdateShipmentStatusPage> {
         : Direction.right;
 
     return Scaffold(
-      appBar: AppBar(title: WidgetUtil.text('UpdateShipmentStatusPage')),
+      appBar: AppBar(title: WidgetUtil.text('Deliver Shipment ')),
       body: SafeArea(
         child: /*Consumer<ShipmentProvider>(
           builder: (ctx, shipmentProvider, _) =>*/ SingleChildScrollView(
@@ -87,6 +88,12 @@ class _UpdateShipmentStatusState extends State<UpdateShipmentStatusPage> {
                 ),
 
                 const SizedBox(height: 24),
+/*
+               InkWell(
+                  onTap: from,
+                  child: getCard('images/deiveredicon.png', 'Price',
+                        '12.0' , direction),
+                ),*/
 
               //  buildDateField( context),
                Padding(
@@ -106,7 +113,7 @@ class _UpdateShipmentStatusState extends State<UpdateShipmentStatusPage> {
     Widget child2 = WidgetUtil.text(text2, color: Colors.white);
     Widget c2 = Container(
       alignment: Alignment.center,
-      //color: Colors.red,
+     // color: Colors.red,
       //   width: 90,
       height: 50,
       // padding: const EdgeInsets.all(10.0),
@@ -336,7 +343,7 @@ String label2 ='Rejected';
       Expanded(
         child: RoundElevatedButton(
           child: getButtonText(label1),
-          color: Colors.blueAccent,
+          color: Colors.blue.shade900,
           onPressed: f1,
           radius: 30,
           minimumSizeFromHeight: 0,
@@ -346,7 +353,7 @@ String label2 ='Rejected';
       Expanded(
         child: RoundElevatedButton(
           child: getButtonText(label2),
-          color: Colors.blueAccent,
+          color: Colors.blue.shade900,
           onPressed: f2,
           radius: 30,
           minimumSizeFromHeight: 0,

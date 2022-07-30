@@ -31,9 +31,9 @@ class _AssignShipmentState extends State<AssignShipment> {
         ? Direction.left
         : Direction.right;
 
+    //${widget._shipmentStatus.name}
 
-
-    String title = 'Assign shipment ${widget._shipmentStatus.name}';
+    String title = 'Assign Driver For Deliver shipment ';
     //  print('_ListAddressesState build ');
     double height = 150.0;
 

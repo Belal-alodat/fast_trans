@@ -37,10 +37,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    emailController.text = 't@com1';
+    emailController.text = 'b.f.alodat@Gmail.com';
     passwordController.text = '123123';
-    nameController.text = 'Az123456789';
-    mobileController.text = '0569960717';
+    nameController.text = 'Belal Alodat';
+    mobileController.text = '0777866276';
 
     return SafeArea(
       child: Scaffold(
@@ -62,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
               const SizedBox(height: 24),
-              text(tr('Register ${this.widget.role}'), size: 40, color: Colors.black),
+              text(tr('create Operator Account '), size: 30, color: Colors.black),
               const SizedBox(height: 64),
               RoundTextField(
                 hintText: "full name",

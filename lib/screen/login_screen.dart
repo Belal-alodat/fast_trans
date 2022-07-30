@@ -71,6 +71,7 @@ class LoginPageState extends State<LoginPage> {
                 enabledBorderSideColor: Colors.blue,
                 focusedBorderSideColor: Colors.blue,
                 isEmail: true,
+                isRadius: false,
               ),
               const SizedBox(height: 14),
               RoundTextField(
@@ -96,34 +97,46 @@ class LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 30,
                 width: double.infinity,
-                child: Center(
+            //    child: Center(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      InkWell(
-                        child: text(
-                          tr('join now As Driver'),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          //crossAxisAlignment: CrossAxisAlignment.,
+                          children: [
+                            InkWell(
+                              child: text(
+                                tr('join us'),
+                              ),
+                              onTap: () {
+                                Navigator.pushNamed(context, '/register-driver');
+                              },
+                            ),
+                            const VerticalDivider(
+                              color: Colors.black,
+                              thickness: 2,
+                            ),
+                          ],
                         ),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/register-driver');
-                        },
                       ),
-                      const VerticalDivider(
-                        color: Colors.black,
-                        thickness: 2,
-                      ),
-                      InkWell(
+
+    Expanded(
+    child: InkWell(
                         child: text(
-                          tr('join now As Supplier'),
+                          tr('forgetPassword'),
                         ),
                         onTap: () {
                           Navigator.pushNamed(context, '/register-supplier');
                         },
                       ),
+    ),
                     ],
                   ),
-                ),
+              //  ),
               ),
             ],
           ),

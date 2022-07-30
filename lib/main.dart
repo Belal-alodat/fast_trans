@@ -131,7 +131,7 @@ class MyApp extends StatelessWidget {
 
 
           '/customer/${ShipmentStatus.Customer_Submitted.name}':
-              (_)=>ListShipmentWithStatus([ShipmentStatus.Customer_Submitted],'Delete shipments','/customers','/Customer/UpdateShipmentPage',floatingActionButtonPath: '/shipment'),
+              (_)=>ListShipmentWithStatus([ShipmentStatus.Customer_Submitted],'create shipments','/customers','/Customer/UpdateShipmentPage',floatingActionButtonPath: '/shipment'),
 
           '/customer/${ShipmentStatus.Operator_Accepted.name}':(_)=>ListShipmentWithStatus([ShipmentStatus.Operator_Accepted],'Accept shipments','/customers','/Customer/UpdateShipmentPage'),
 
@@ -139,7 +139,7 @@ class MyApp extends StatelessWidget {
 
          '/customers/shipments/noAction':(_)=>UpdateShipmentStatusPage(basepath: 'Customer',noAction:true),
 
-          '/customers/shipments':(_)=>ListShipmentWithStatus([ShipmentStatus.Customer_Canceled,ShipmentStatus.Operator_Accepted,ShipmentStatus.Customer_Accepted,ShipmentStatus.Customer_Submitted,ShipmentStatus.Driver_Delivered],'suppliers','/customers','/customers/shipments/noAction'),
+          '/customers/shipments':(_)=>ListShipmentWithStatus([ShipmentStatus.Customer_Canceled,ShipmentStatus.Operator_Accepted,ShipmentStatus.Customer_Accepted,ShipmentStatus.Customer_Submitted,ShipmentStatus.Driver_Delivered],'Track Shipments','/customers','/customers/shipments/noAction'),
 
         },
       ),

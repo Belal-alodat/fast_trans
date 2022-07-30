@@ -167,7 +167,7 @@ class _PickingDriverState extends State<PickingDriver> {
             children: [
               Container(
                 //  color: Colors.red,
-                child: WidgetUtil.text('name', color: backgroundColor),
+                child: WidgetUtil.text('Driver', color: backgroundColor),
               ),
               SizedBox(width: 27),
               Container(

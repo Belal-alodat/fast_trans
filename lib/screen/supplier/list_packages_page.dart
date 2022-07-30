@@ -202,7 +202,7 @@ class _ListPackagesState extends State<ListPackagesPage> {
             children: [
               Container(
                 //  color: Colors.red,
-                child: WidgetUtil.text('name', color: backgroundColor),
+                child: WidgetUtil.text('product', color: backgroundColor),
               ),
               SizedBox(width: 27),
               Container(

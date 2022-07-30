@@ -31,9 +31,9 @@ class _MainPageState extends State<MainPage> {
     // passwordController.text = 'Az123456789';
     List<ItemMenuType> itemTypeList =
     widget.role.contains(Constants.CUSTOMER_ROLE) ?  [
-      ItemMenuType('create Shipment', false, 'images/myShipments$lang.png', '/customer/${ShipmentStatus.Customer_Submitted.name}'),
+      ItemMenuType('Create Shipment', false, 'images/myShipments$lang.png', '/customer/${ShipmentStatus.Customer_Submitted.name}'),
       ItemMenuType('Accept the shipment Cost', false, 'images/Track$lang.png', '/customer/${ShipmentStatus.Operator_Accepted.name}'),
-      ItemMenuType('see shipments', false, 'images/Track$lang.png', '/customers/shipments'),
+      ItemMenuType('Track Shipments ', false, 'images/Track$lang.png', '/customers/shipments'),
 
 
     ]:widget.role.contains(Constants.DRIVER_ROLE) ?
@@ -80,7 +80,10 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ]),
               const SizedBox(height: 24),
-              WidgetUtil.text(tr('Main Page of ${widget.role}'), size: 40, color: Colors.black),
+           //   WidgetUtil.text(tr('Main Page of ${widget.role}'), size: 40, color: Colors.black),
+              if (widget.role.contains(Constants.CUSTOMER_ROLE) )  WidgetUtil.text(tr('Welcome: Belal  Alodat'), size: 20, color: Colors.black),
+              if (widget.role.contains(Constants.OPERATOR_ROLE) )  WidgetUtil.text(tr('Welcome: Operator'), size: 20, color: Colors.black),
+              if (widget.role.contains(Constants.DRIVER_ROLE) )  WidgetUtil.text(tr('Welcome: Driver'), size: 20, color: Colors.black),
               const SizedBox(height: 64),
               Expanded(
                 child: Container(

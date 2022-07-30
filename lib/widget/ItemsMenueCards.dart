@@ -88,7 +88,8 @@ class CardMenu extends StatelessWidget {
           ),
             child:Center(
               child: Text(
-    title, textAlign: TextAlign.center,),
+
+    title, style: TextStyle(color: Colors.blue, fontSize: 20, fontFamily: 'loewm'), textAlign: TextAlign.center,),
             )
           /*child: Image.asset(
             imageTitle,
